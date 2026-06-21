@@ -165,6 +165,24 @@ router.post('/:id/enroll', authenticateToken, authorizeRoles('student'), async (
     }
 });
 
+// 4.5. Get all courses managed by this instructor (both published and unpublished)
+router.get('/instructor', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT c.*, 
+                    (SELECT COUNT(*) FROM enrollments WHERE course_id = c.id) as enrolled_count
+             FROM courses c 
+             WHERE c.instructor_id = $1 
+             ORDER BY c.created_at DESC`,
+            [req.user.id]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error retrieving instructor courses.' });
+    }
+});
+
 // 5. Create a course (Instructor only)
 router.post('/', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
     const { title, category, description, learning_outcomes, image_url } = req.body;
@@ -277,6 +295,33 @@ router.delete('/:id', authenticateToken, authorizeRoles('instructor'), async (re
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error purging course.' });
+    }
+});
+
+// 9. Toggle Publish State (Instructor Only)
+router.patch('/:id/publish', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
+    const courseId = req.params.id;
+    try {
+        const courseRes = await pool.query('SELECT * FROM courses WHERE id = $1', [courseId]);
+        if (courseRes.rows.length === 0) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+        if (courseRes.rows[0].instructor_id !== req.user.id) {
+            return res.status(403).json({ error: 'Access denied.' });
+        }
+        
+        const newPublishState = !courseRes.rows[0].is_published;
+        const result = await pool.query(
+            'UPDATE courses SET is_published = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+            [newPublishState, courseId]
+        );
+        res.json({
+            message: `Course publish state toggled to: ${newPublishState}`,
+            course: result.rows[0]
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error updating publish state.' });
     }
 });
 

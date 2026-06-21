@@ -34,21 +34,27 @@
             <a href="#" class="sidebar-nav-link active" data-section="main">
                 <i class="fa-solid fa-gauge-high"></i> Galaxy Dashboard
             </a>
-            <a href="#" class="sidebar-nav-link" data-section="catalog">
-                <i class="fa-solid fa-graduation-cap"></i> Learning Modules
+            <a href="#" class="sidebar-nav-link" data-section="courses">
+                <i class="fa-solid fa-graduation-cap"></i> Courses
             </a>
-            <a href="#" class="sidebar-nav-link" data-section="star-maps">
-                <i class="fa-solid fa-map-location-dot"></i> Star Maps
+            <a href="#" class="sidebar-nav-link" data-section="progress">
+                <i class="fa-solid fa-chart-line"></i> Learning Progress
             </a>
-            <a href="#" class="sidebar-nav-link" data-section="research-lab">
-                <i class="fa-solid fa-flask-vial"></i> Research Lab
+            <a href="#" class="sidebar-nav-link" data-section="assignments">
+                <i class="fa-solid fa-file-signature"></i> Assignments
             </a>
-            <a href="#" class="sidebar-nav-link" data-section="archives">
-                <i class="fa-solid fa-box-archive"></i> Archives
+            <a href="#" class="sidebar-nav-link" data-section="quizzes">
+                <i class="fa-solid fa-square-poll-vertical"></i> Quiz Results
+            </a>
+            <a href="#" class="sidebar-nav-link" data-section="certificates">
+                <i class="fa-solid fa-certificate"></i> Certificates
+            </a>
+            <a href="#" class="sidebar-nav-link" data-section="notifications-sec">
+                <i class="fa-solid fa-bell"></i> Notifications
             </a>
         </nav>
         
-        <button class="btn btn-primary sidebar-action-btn">
+        <button class="btn btn-primary sidebar-action-btn" style="display:none;">
             <i class="fa-solid fa-rocket"></i> New Mission
         </button>
         
@@ -97,9 +103,9 @@
                     <div class="profile-avatar" id="user-profile-avatar">
                         <!-- Default Student Avatar SVG -->
                         <svg viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="46" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2"/>
-                            <polygon points="50,22 64,40 50,58 36,40" fill="none" stroke="#8b5cf6" stroke-width="2"/>
-                            <circle cx="50" cy="40" r="6" fill="#8b5cf6"/>
+                            <circle cx="50" cy="50" r="46" fill="#26080e" stroke="#ff3355" stroke-width="2"/>
+                            <polygon points="50,22 64,40 50,58 36,40" fill="none" stroke="#ff3355" stroke-width="2"/>
+                            <circle cx="50" cy="40" r="6" fill="#ff3355"/>
                             <path d="M25,78 L75,78 A 25 25 0 0 0 25 78" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="2,2"/>
                         </svg>
                     </div>
@@ -126,7 +132,7 @@
                         <div class="radial-progress-box">
                             <svg class="progress-ring" width="140" height="140">
                                 <circle class="progress-ring-circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="54" cx="70" cy="70"/>
-                                <circle class="progress-ring-circle" stroke="#8b5cf6" stroke-width="8" stroke-dasharray="339.29" stroke-dashoffset="50.89" fill="transparent" r="54" cx="70" cy="70"/>
+                                <circle class="progress-ring-circle" stroke="#ff3355" stroke-width="8" stroke-dasharray="339.29" stroke-dashoffset="50.89" fill="transparent" r="54" cx="70" cy="70"/>
                             </svg>
                             <div class="progress-text-overlay">
                                 <strong>85%</strong>
@@ -150,11 +156,11 @@
                             <!-- Mini Sparkline Graph SVG -->
                             <div class="sparkline-container">
                                 <svg viewBox="0 0 160 50" class="sparkline-svg">
-                                    <rect x="0" y="35" width="20" height="15" fill="rgba(6, 182, 212, 0.2)" rx="2"/>
-                                    <rect x="30" y="25" width="20" height="25" fill="rgba(6, 182, 212, 0.4)" rx="2"/>
-                                    <rect x="60" y="30" width="20" height="20" fill="rgba(6, 182, 212, 0.3)" rx="2"/>
-                                    <rect x="90" y="15" width="20" height="35" fill="rgba(6, 182, 212, 0.7)" rx="2"/>
-                                    <rect x="120" y="5" width="20" height="45" fill="rgb(6, 182, 212)" rx="2" class="bar-glow-cyan"/>
+                                    <rect x="0" y="35" width="20" height="15" fill="rgba(255, 92, 117, 0.2)" rx="2"/>
+                                    <rect x="30" y="25" width="20" height="25" fill="rgba(255, 92, 117, 0.4)" rx="2"/>
+                                    <rect x="60" y="30" width="20" height="20" fill="rgba(255, 92, 117, 0.3)" rx="2"/>
+                                    <rect x="90" y="15" width="20" height="35" fill="rgba(255, 92, 117, 0.7)" rx="2"/>
+                                    <rect x="120" y="5" width="20" height="45" fill="rgb(255, 92, 117)" rx="2" class="bar-glow-cyan"/>
                                 </svg>
                             </div>
                         </div>
@@ -276,10 +282,10 @@
                         <div class="revenue-chart">
                             <!-- Custom SVG bar chart -->
                             <svg viewBox="0 0 300 120" class="rev-chart-svg">
-                                <rect x="30" y="70" width="22" height="50" fill="rgba(6, 182, 212, 0.25)" rx="4"/>
-                                <rect x="80" y="50" width="22" height="70" fill="rgba(139, 92, 246, 0.4)" rx="4"/>
-                                <rect x="130" y="60" width="22" height="60" fill="rgba(6, 182, 212, 0.25)" rx="4"/>
-                                <rect x="180" y="30" width="22" height="90" fill="rgba(139, 92, 246, 0.6)" rx="4"/>
+                                <rect x="30" y="70" width="22" height="50" fill="rgba(255, 92, 117, 0.25)" rx="4"/>
+                                <rect x="80" y="50" width="22" height="70" fill="rgba(255, 51, 85, 0.4)" rx="4"/>
+                                <rect x="130" y="60" width="22" height="60" fill="rgba(255, 92, 117, 0.25)" rx="4"/>
+                                <rect x="180" y="30" width="22" height="90" fill="rgba(255, 51, 85, 0.6)" rx="4"/>
                                 <rect x="230" y="10" width="22" height="110" fill="var(--clr-cyan)" rx="4" class="bar-glow-cyan"/>
                             </svg>
                         </div>
@@ -425,44 +431,159 @@
 
 
             <!-- ========================================================
-                 STAR MAPS SECTION PANEL
+                 COURSES PANEL
                  ======================================================== -->
-            <div class="role-dashboard-wrapper" id="star-maps-panel" style="display:none;">
+            <div class="role-dashboard-wrapper" id="courses-panel" style="display:none;">
                 <div style="padding:32px 0;">
-                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-map-location-dot" style="color:var(--clr-cyan);"></i> Learning Star Maps</h2>
-                    <p style="color:var(--text-secondary); margin-bottom:32px;">Visual roadmap of all your enrolled courses and learning trajectories.</p>
-                    <div id="star-maps-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px;">
-                        <div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite-dish" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Calibrating orbital trajectory maps...</div>
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-graduation-cap" style="color:var(--clr-purple);"></i> Courses</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Browse and enroll in galactic courses or access your learning deck.</p>
+                    
+                    <div class="sub-tab-bar" style="display:flex; gap:16px; border-bottom:1px solid var(--glass-border); padding-bottom:12px; margin-bottom:24px;">
+                        <button class="sub-tab active" data-tab="all" style="background:none; border:none; color:#fff; font-family:var(--font-heading); font-size:0.95rem; cursor:pointer; padding:6px 12px; border-radius:6px; transition: all 0.3s; font-weight:600;">All Courses</button>
+                        <button class="sub-tab" data-tab="enrolled" style="background:none; border:none; color:var(--text-secondary); font-family:var(--font-heading); font-size:0.95rem; cursor:pointer; padding:6px 12px; border-radius:6px; transition: all 0.3s;">Enrolled Courses</button>
+                    </div>
+                    
+                    <div id="courses-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+                        <!-- Dynamic Courses go here -->
                     </div>
                 </div>
             </div>
 
             <!-- ========================================================
-                 RESEARCH LAB SECTION PANEL (Forum + AI)
+                 LEARNING PROGRESS PANEL
                  ======================================================== -->
-            <div class="role-dashboard-wrapper" id="research-lab-panel" style="display:none;">
+            <div class="role-dashboard-wrapper" id="progress-panel" style="display:none;">
                 <div style="padding:32px 0;">
-                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-flask-vial" style="color:var(--clr-purple);"></i> Research Lab</h2>
-                    <p style="color:var(--text-secondary); margin-bottom:32px;">Discussion boards, collaborative experiments, and AI-assisted research sessions.</p>
-                    <div class="dash-card" style="padding:32px; text-align:center;">
-                        <i class="fa-solid fa-robot" style="font-size:2.5rem; color:var(--clr-purple); margin-bottom:16px; display:block;"></i>
-                        <h3 style="font-family:var(--font-heading); margin-bottom:12px;">Open Orion AI Research Assistant</h3>
-                        <p style="color:var(--text-secondary); margin-bottom:24px;">Use the Orion AI drawer to ask research questions, generate study plans, and get personalized insights on any enrolled course topic.</p>
-                        <button class="btn btn-primary" onclick="document.getElementById('open-ai-btn').click()"><i class="fa-solid fa-wand-magic-sparkles"></i> Launch Orion AI</button>
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-chart-line" style="color:var(--clr-purple);"></i> Learning Progress</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Monitor your academic progression telemetry across all sectors.</p>
+                    <div id="progress-container" style="display:flex; flex-direction:column; gap:20px;">
+                        <!-- Dynamic progression metrics, circular & linear indicators -->
                     </div>
                 </div>
             </div>
 
             <!-- ========================================================
-                 ARCHIVES SECTION PANEL (Completed Courses)
+                 ASSIGNMENTS PANEL
                  ======================================================== -->
-            <div class="role-dashboard-wrapper" id="archives-panel" style="display:none;">
+            <div class="role-dashboard-wrapper" id="assignments-panel" style="display:none;">
                 <div style="padding:32px 0;">
-                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-box-archive" style="color:var(--clr-pink);"></i> Course Archives</h2>
-                    <p style="color:var(--text-secondary); margin-bottom:32px;">All completed course records and earned stellar certificates.</p>
-                    <div id="archives-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px;">
-                        <div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Scanning academy records...</div>
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-file-signature" style="color:var(--clr-purple);"></i> Assignments</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Verify mission tasks, deadlines, and transmit your cadet reports.</p>
+                    <div id="assignments-container" style="display:grid; grid-template-columns:1fr; gap:20px;">
+                        <!-- Dynamic assignments sorted by due date -->
                     </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 QUIZ RESULTS PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="quizzes-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-square-poll-vertical" style="color:var(--clr-purple);"></i> Quiz Results</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Review your scores and telemetry outcomes for past assessments.</p>
+                    <div class="dash-card" style="padding:24px; overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; color:#fff; text-align:left;" id="quiz-results-table">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--glass-border); font-family:var(--font-heading); color:var(--clr-cyan); font-size:0.85rem;">
+                                    <th style="padding:12px;">Quiz Title</th>
+                                    <th style="padding:12px;">Course</th>
+                                    <th style="padding:12px;">Score</th>
+                                    <th style="padding:12px;">Completed Date</th>
+                                    <th style="padding:12px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="quiz-results-tbody">
+                                <!-- Dynamic quiz results -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 CERTIFICATES PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="certificates-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-certificate" style="color:var(--clr-purple);"></i> Certificates</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Download and verify your interstellar graduation certificates.</p>
+                    <div id="certificates-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+                        <!-- Dynamic certificate grids -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 NOTIFICATIONS SECTION PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="notifications-sec-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-bell" style="color:var(--clr-purple);"></i> Notifications Feed</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Transmissions and orbital system logs feed.</p>
+                    <div id="notifications-sec-list" style="display:flex; flex-direction:column; gap:12px;">
+                        <!-- Dynamic list of notifications -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 INSTRUCTOR COURSES MANAGEMENT PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="instructor-courses-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                        <div>
+                            <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-folder-open" style="color:var(--clr-cyan);"></i> Course Constellations</h2>
+                            <p style="color:var(--text-secondary);">Manage, build modules, and publish course curriculum tracks.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openCreateCourseModal()" style="background:linear-gradient(135deg, var(--clr-purple), var(--clr-cyan)); border:none;"><i class="fa-solid fa-plus"></i> Create Course</button>
+                    </div>
+                    <div id="instructor-courses-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
+                        <!-- Dynamic Instructor Courses go here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 INSTRUCTOR ANALYTICS PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="instructor-analytics-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-users-viewfinder" style="color:var(--clr-cyan);"></i> Student Telemetry Analytics</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Track cadet engagement, progress thresholds, and grading queues.</p>
+                    
+                    <div id="instructor-analytics-container" style="display:flex; flex-direction:column; gap:20px;">
+                        <!-- Dynamic tables of student lists, progress, and assignments to grade -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 INSTRUCTOR ANNUNCEMENTS & FORUM PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="instructor-forum-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-bullhorn" style="color:var(--clr-cyan);"></i> Broadcast Announcements</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:24px;">Post announcements across course sectors and review student inquiries.</p>
+                    
+                    <div class="dash-card" style="padding:24px; margin-bottom:24px;">
+                        <h3 style="font-family:var(--font-heading); font-size:1.05rem; margin-bottom:16px; color:#fff;">New Fleet Announcement</h3>
+                        <form id="instructor-broadcast-form" style="display:flex; flex-direction:column; gap:14px;">
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:6px;">SELECT COURSE TARGET</label>
+                                <select id="broadcast-course-select" style="width:100%; padding:10px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:8px; color:#fff;" required></select>
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:6px;">ANNOUNCEMENT MESSAGE</label>
+                                <textarea id="broadcast-message-input" placeholder="Enter broadcast telemetry message details..." style="width:100%; height:100px; padding:10px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:8px; color:#fff; font-family:var(--font-body);" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="align-self:flex-end; padding:8px 24px; background:linear-gradient(135deg, var(--clr-purple), var(--clr-cyan)); border:none;"><i class="fa-solid fa-paper-plane"></i> Broadcast Message</button>
+                        </form>
+                    </div>
+
+                    <h3 style="font-family:var(--font-heading); color:#fff; font-size:1.15rem; margin-bottom:16px;">Recent Broadcast Logs</h3>
+                    <div id="recent-broadcasts-list" style="display:flex; flex-direction:column; gap:12px;"></div>
                 </div>
             </div>
 
@@ -597,7 +718,7 @@
                 <!-- User Info -->
                 <div style="text-align:center;">
                     <h3 id="pc-name" style="font-family:var(--font-heading); font-size:1.4rem; color:#fff; margin-bottom:6px;">---</h3>
-                    <span id="pc-role" style="font-size:0.75rem; background:rgba(139,92,246,0.2); border:1px solid rgba(139,92,246,0.3); color:var(--clr-purple); border-radius:20px; padding:3px 12px; font-family:var(--font-heading); font-weight:600; letter-spacing:1px;">STUDENT</span>
+                    <span id="pc-role" style="font-size:0.75rem; background:rgba(255, 51, 85,0.2); border:1px solid rgba(255, 51, 85,0.3); color:var(--clr-purple); border-radius:20px; padding:3px 12px; font-family:var(--font-heading); font-weight:600; letter-spacing:1px;">STUDENT</span>
                 </div>
                 <!-- Level/XP -->
                 <div style="width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:12px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
@@ -695,7 +816,7 @@
                 <button class="lms-modal-close" id="close-support-modal">&#x2715;</button>
             </div>
             <div class="lms-modal-body" style="padding:32px; display:flex; flex-direction:column; gap:24px;">
-                <div style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); border-radius:12px; padding:20px;">
+                <div style="background:rgba(255, 92, 117,0.08); border:1px solid rgba(255, 92, 117,0.2); border-radius:12px; padding:20px;">
                     <h4 style="font-family:var(--font-heading); color:var(--clr-cyan); margin-bottom:8px;"><i class="fa-solid fa-book"></i> Quick References</h4>
                     <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; color:var(--text-secondary); font-size:0.9rem;">
                         <li><i class="fa-solid fa-chevron-right" style="color:var(--clr-cyan); margin-right:8px;"></i>Use the <strong style="color:#fff;">AI Drawer</strong> (✦ button) for instant course help</li>

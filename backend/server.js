@@ -49,6 +49,7 @@ app.use('/api/forum', require('./routes/forum'));
 app.use('/api/messages', require('./routes/messages'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/certificates', require('./routes/certificates'));
 
 // Global search endpoint
 const { pool } = require('../db/db');

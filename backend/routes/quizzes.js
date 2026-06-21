@@ -168,4 +168,23 @@ router.post('/:id/submit', authenticateToken, authorizeRoles('student'), async (
     }
 });
 
+// 5. Get student's quiz results
+router.get('/student/results', authenticateToken, authorizeRoles('student'), async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT qr.*, q.title as quiz_title, c.title as course_title
+             FROM quiz_results qr
+             INNER JOIN quizzes q ON qr.quiz_id = q.id
+             INNER JOIN courses c ON q.course_id = c.id
+             WHERE qr.student_id = $1
+             ORDER BY qr.completed_at DESC`,
+            [req.user.id]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error retrieving student quiz records.' });
+    }
+});
+
 module.exports = router;

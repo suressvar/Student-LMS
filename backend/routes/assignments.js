@@ -47,6 +47,27 @@ router.get('/course/:courseId', authenticateToken, async (req, res) => {
     }
 });
 
+// 1.5. Get all assignments for student's enrolled courses
+router.get('/student', authenticateToken, authorizeRoles('student'), async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT a.*, c.title as course_title,
+                    s.id as submission_id, s.content as submission_content, s.file_url, s.grade, s.feedback, s.status as submission_status, s.submitted_at
+             FROM assignments a
+             INNER JOIN enrollments e ON a.course_id = e.course_id
+             INNER JOIN courses c ON a.course_id = c.id
+             LEFT JOIN submissions s ON a.id = s.assignment_id AND s.student_id = $1
+             WHERE e.student_id = $1
+             ORDER BY a.deadline ASC`,
+            [req.user.id]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error pulling student assignments.' });
+    }
+});
+
 // 2. Create an assignment (Instructor only)
 router.post('/', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
     const { course_id, title, description, deadline } = req.body;

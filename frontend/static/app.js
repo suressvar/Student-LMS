@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             x: 220,
             y: 180,
             r: 16,
-            color: '#8b5cf6',
+            color: '#ff3355',
             glowClass: 'glow-purple'
         },
         {
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
             x: 520,
             y: 280,
             r: 16,
-            color: '#06b6d4',
+            color: '#ff5c75',
             glowClass: 'glow-cyan'
         },
         {

@@ -122,5 +122,73 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Server error pulling dashboard metrics.' });
     }
 });
+// GET /api/analytics/student-progress
+router.get('/student-progress', authenticateToken, async (req, res) => {
+    try {
+        const studentId = req.user.id;
+
+        // Fetch enrolled courses with progress metrics
+        const coursesQuery = await pool.query(
+            `SELECT c.id, c.title, c.category, e.progress,
+                    (SELECT COUNT(*) FROM learning_modules WHERE course_id = c.id) as total_modules,
+                    (SELECT COUNT(*) FROM assignments WHERE course_id = c.id) as total_assignments,
+                    (SELECT COUNT(*) FROM submissions s INNER JOIN assignments a ON s.assignment_id = a.id WHERE a.course_id = c.id AND s.student_id = $1) as submitted_assignments
+             FROM enrollments e
+             INNER JOIN courses c ON e.course_id = c.id
+             WHERE e.student_id = $1`,
+            [studentId]
+        );
+
+        const courses = coursesQuery.rows.map(row => {
+            const totalModules = parseInt(row.total_modules || 0);
+            const progress = parseInt(row.progress || 0);
+            const completedModules = Math.round(totalModules * (progress / 100));
+
+            return {
+                id: row.id,
+                title: row.title,
+                category: row.category,
+                progress: progress,
+                total_modules: totalModules,
+                completed_modules: completedModules,
+                total_assignments: parseInt(row.total_assignments || 0),
+                submitted_assignments: parseInt(row.submitted_assignments || 0)
+            };
+        });
+
+        // Overall stats
+        const overallCompletionQuery = await pool.query(
+            'SELECT AVG(progress) as avg_prog FROM enrollments WHERE student_id = $1',
+            [studentId]
+        );
+        const overallCompletion = Math.round(parseFloat(overallCompletionQuery.rows[0].avg_prog || 0));
+
+        const submissionsQuery = await pool.query(
+            'SELECT COUNT(*) as total_sub, COUNT(CASE WHEN grade IS NOT NULL THEN 1 END) as graded_sub FROM submissions WHERE student_id = $1',
+            [studentId]
+        );
+        const totalSubmissions = parseInt(submissionsQuery.rows[0].total_sub || 0);
+        const gradedSubmissions = parseInt(submissionsQuery.rows[0].graded_sub || 0);
+
+        const quizzesQuery = await pool.query(
+            'SELECT COUNT(*) as total_quiz, COUNT(CASE WHEN score >= (total_questions * 0.6) THEN 1 END) as passed_quiz FROM quiz_results WHERE student_id = $1',
+            [studentId]
+        );
+        const totalQuizzesTaken = parseInt(quizzesQuery.rows[0].total_quiz || 0);
+        const passedQuizzes = parseInt(quizzesQuery.rows[0].passed_quiz || 0);
+
+        res.json({
+            overall_completion: overallCompletion,
+            total_submissions: totalSubmissions,
+            graded_assignments: gradedSubmissions,
+            total_quizzes_taken: totalQuizzesTaken,
+            passed_quizzes: passedQuizzes,
+            courses: courses
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error retrieving detailed progress telemetry.' });
+    }
+});
 
 module.exports = router;
