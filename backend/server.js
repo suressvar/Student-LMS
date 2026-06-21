@@ -50,6 +50,34 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/notifications', require('./routes/notifications'));
 
+// Global search endpoint
+const { pool } = require('../db/db');
+const { authenticateToken } = require('./middleware/auth');
+
+app.get('/api/search', authenticateToken, async (req, res) => {
+    const q = (req.query.q || '').trim();
+    if (!q || q.length < 2) {
+        return res.json({ courses: [] });
+    }
+    try {
+        const result = await pool.query(
+            `SELECT id, title, category, description
+             FROM courses
+             WHERE is_published = true AND (
+                 LOWER(title) LIKE $1 OR
+                 LOWER(category) LIKE $1 OR
+                 LOWER(description) LIKE $1
+             )
+             LIMIT 6`,
+            [`%${q.toLowerCase()}%`]
+        );
+        res.json({ courses: result.rows });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ courses: [], error: 'Search signal failure.' });
+    }
+});
+
 // Fallback to index.html for undefined requests
 app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/templates/index.html'));

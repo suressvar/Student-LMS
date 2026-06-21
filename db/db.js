@@ -24,6 +24,24 @@ async function initDb() {
         await client.query(schemaSql);
         console.log('Database tables successfully verified/created.');
 
+        // ─── GOOGLE OAUTH MIGRATIONS ────────────────────────────────────────
+        // Make password_hash nullable (for Google-only accounts)
+        await client.query(`
+            ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL
+        `).catch(() => {}); // Ignore if already nullable
+
+        // Add google_id column
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE
+        `).catch(() => {});
+
+        // Add auth_provider column
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(20) DEFAULT 'local'
+        `).catch(() => {});
+        // ─────────────────────────────────────────────────────────────────────
+
+
         // Seed Default Users
         const userCountRes = await client.query('SELECT COUNT(*) FROM users');
         if (parseInt(userCountRes.rows[0].count) === 0) {

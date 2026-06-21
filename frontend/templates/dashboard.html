@@ -28,19 +28,19 @@
         </div>
         
         <nav class="sidebar-nav">
-            <a href="#" class="sidebar-nav-link active">
+            <a href="#" class="sidebar-nav-link active" data-section="main">
                 <i class="fa-solid fa-gauge-high"></i> Galaxy Dashboard
             </a>
-            <a href="#" class="sidebar-nav-link">
+            <a href="#" class="sidebar-nav-link" data-section="catalog">
                 <i class="fa-solid fa-graduation-cap"></i> Learning Modules
             </a>
-            <a href="#" class="sidebar-nav-link">
+            <a href="#" class="sidebar-nav-link" data-section="star-maps">
                 <i class="fa-solid fa-map-location-dot"></i> Star Maps
             </a>
-            <a href="#" class="sidebar-nav-link">
+            <a href="#" class="sidebar-nav-link" data-section="research-lab">
                 <i class="fa-solid fa-flask-vial"></i> Research Lab
             </a>
-            <a href="#" class="sidebar-nav-link">
+            <a href="#" class="sidebar-nav-link" data-section="archives">
                 <i class="fa-solid fa-box-archive"></i> Archives
             </a>
         </nav>
@@ -50,7 +50,7 @@
         </button>
         
         <div class="sidebar-footer">
-            <a href="#" class="sidebar-footer-link">
+            <a href="#" class="sidebar-footer-link" id="support-link">
                 <i class="fa-solid fa-circle-question"></i> Support
             </a>
             <a href="index.html" class="sidebar-footer-link logout-trigger" id="logout-btn">
@@ -67,9 +67,10 @@
             <h1 class="header-title" id="dash-header-title">Mission Control</h1>
             
             <div class="header-actions">
-                <div class="search-box">
+                <div class="search-box" style="position:relative;">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search constellations...">
+                    <input type="text" class="search-input" id="dash-search-input" placeholder="Search constellations..." autocomplete="off">
+                    <div id="search-dropdown" style="display:none; position:absolute; top:110%; left:0; right:0; background:var(--glass-bg-modal); border:1px solid var(--glass-border-strong); border-radius:12px; backdrop-filter:var(--glass-blur-heavy); -webkit-backdrop-filter:var(--glass-blur-heavy); box-shadow:var(--glass-shadow); z-index:200; overflow:hidden; min-width:280px;"></div>
                 </div>
                 
                 <button class="action-btn" id="bell-btn" aria-label="Notifications">
@@ -85,7 +86,7 @@
                 </button>
                 
                 <!-- Profile details -->
-                <div class="profile-widget">
+                <div class="profile-widget" id="profile-widget" style="cursor:pointer;" title="View profile">
                     <div class="profile-text">
                         <span class="profile-name" id="user-profile-name">Cmdr. Astro</span>
                         <span class="profile-level" id="user-profile-level">LEVEL 42 ARCHITECT</span>
@@ -623,6 +624,48 @@
                 </div>
             </div>
 
+            <!-- ========================================================
+                 STAR MAPS SECTION PANEL
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="star-maps-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-map-location-dot" style="color:var(--clr-cyan);"></i> Learning Star Maps</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:32px;">Visual roadmap of all your enrolled courses and learning trajectories.</p>
+                    <div id="star-maps-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px;">
+                        <div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite-dish" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Calibrating orbital trajectory maps...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 RESEARCH LAB SECTION PANEL (Forum + AI)
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="research-lab-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-flask-vial" style="color:var(--clr-purple);"></i> Research Lab</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:32px;">Discussion boards, collaborative experiments, and AI-assisted research sessions.</p>
+                    <div class="dash-card" style="padding:32px; text-align:center;">
+                        <i class="fa-solid fa-robot" style="font-size:2.5rem; color:var(--clr-purple); margin-bottom:16px; display:block;"></i>
+                        <h3 style="font-family:var(--font-heading); margin-bottom:12px;">Open Orion AI Research Assistant</h3>
+                        <p style="color:var(--text-secondary); margin-bottom:24px;">Use the Orion AI drawer to ask research questions, generate study plans, and get personalized insights on any enrolled course topic.</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('open-ai-btn').click()"><i class="fa-solid fa-wand-magic-sparkles"></i> Launch Orion AI</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 ARCHIVES SECTION PANEL (Completed Courses)
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="archives-panel" style="display:none;">
+                <div style="padding:32px 0;">
+                    <h2 style="font-family:var(--font-heading); font-size:1.6rem; margin-bottom:8px;"><i class="fa-solid fa-box-archive" style="color:var(--clr-pink);"></i> Course Archives</h2>
+                    <p style="color:var(--text-secondary); margin-bottom:32px;">All completed course records and earned stellar certificates.</p>
+                    <div id="archives-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px;">
+                        <div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Scanning academy records...</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Dashboard footer info -->
@@ -741,6 +784,162 @@
             </div>
         </div>
     </div>
+
+    <!-- =============================================
+         PROFILE CARD POPOVER (Task 4)
+         ============================================= -->
+    <div id="profile-card-popover" class="lms-modal" style="display:none; z-index:10000;">
+        <div class="lms-modal-content" style="max-width:480px;">
+            <div class="lms-modal-header">
+                <h2><i class="fa-solid fa-id-badge" style="color:var(--clr-purple);"></i> Cadet Profile</h2>
+                <button class="lms-modal-close" id="close-profile-card">&#x2715;</button>
+            </div>
+            <div class="lms-modal-body" style="padding:32px; display:flex; flex-direction:column; align-items:center; gap:20px;">
+                <!-- Avatar Display -->
+                <div id="pc-avatar" style="width:80px; height:80px; border-radius:50%; border:2px solid var(--clr-purple); overflow:hidden; display:flex; align-items:center; justify-content:center;"></div>
+                <!-- User Info -->
+                <div style="text-align:center;">
+                    <h3 id="pc-name" style="font-family:var(--font-heading); font-size:1.4rem; color:#fff; margin-bottom:6px;">---</h3>
+                    <span id="pc-role" style="font-size:0.75rem; background:rgba(139,92,246,0.2); border:1px solid rgba(139,92,246,0.3); color:var(--clr-purple); border-radius:20px; padding:3px 12px; font-family:var(--font-heading); font-weight:600; letter-spacing:1px;">STUDENT</span>
+                </div>
+                <!-- Level/XP -->
+                <div style="width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:12px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
+                    <div>
+                        <div id="pc-level" style="font-size:1.6rem; font-weight:700; font-family:var(--font-heading); color:var(--clr-cyan);">-</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); letter-spacing:1px;">LEVEL</div>
+                    </div>
+                    <div>
+                        <div id="pc-xp" style="font-size:1.6rem; font-weight:700; font-family:var(--font-heading); color:var(--clr-purple);">-</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); letter-spacing:1px;">XP</div>
+                    </div>
+                    <div>
+                        <div id="pc-email" style="font-size:0.8rem; font-weight:600; font-family:var(--font-heading); color:var(--text-secondary); margin-top:6px; word-break:break-all;">---</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); letter-spacing:1px;">EMAIL</div>
+                    </div>
+                </div>
+                <!-- Edit Form -->
+                <div style="width:100%; border-top:1px solid var(--glass-border); padding-top:20px;">
+                    <h4 style="font-family:var(--font-heading); font-size:0.85rem; color:var(--text-secondary); margin-bottom:14px; letter-spacing:1px;">EDIT PROFILE</h4>
+                    <form id="profile-edit-form" style="display:flex; flex-direction:column; gap:14px;">
+                        <input type="text" id="pc-edit-name" placeholder="Callsign (Display Name)" style="width:100%; padding:10px 14px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:8px; color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem; outline:none; transition:border-color 0.2s;">
+                        <button type="submit" class="btn btn-primary" style="width:100%;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Callsign
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         NOTIFICATIONS PANEL
+         ============================================= -->
+    <div id="notifications-panel" style="position:fixed; top:0; right:-420px; width:400px; height:100%; z-index:10001; transition:right 0.35s cubic-bezier(0.4,0,0.2,1); background:rgba(8,11,28,0.95); backdrop-filter:var(--glass-blur-heavy); -webkit-backdrop-filter:var(--glass-blur-heavy); border-left:1px solid var(--glass-border-strong); box-shadow:-12px 0 40px rgba(0,0,0,0.5); display:flex; flex-direction:column;">
+        <div style="padding:24px; border-bottom:1px solid var(--glass-border); display:flex; align-items:center; justify-content:space-between;">
+            <h2 style="font-family:var(--font-heading); font-size:1.2rem;"><i class="fa-regular fa-bell" style="color:var(--clr-cyan);"></i> Transmissions</h2>
+            <button id="close-notif-panel" style="background:none; border:none; color:var(--text-secondary); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+        </div>
+        <div id="notifications-list" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px;">
+            <div style="color:rgba(255,255,255,0.3); text-align:center; padding:40px; font-size:0.9rem;"><i class="fa-solid fa-satellite-dish" style="font-size:2rem; display:block; margin-bottom:12px;"></i>Scanning signal bands...</div>
+        </div>
+        <div style="padding:16px; border-top:1px solid var(--glass-border);">
+            <button id="mark-all-read-btn" class="btn btn-secondary" style="width:100%; font-size:0.85rem;"><i class="fa-solid fa-check-double"></i> Mark All As Read</button>
+        </div>
+    </div>
+
+    <!-- =============================================
+         SETTINGS PANEL
+         ============================================= -->
+    <div id="settings-panel" style="position:fixed; top:0; right:-420px; width:400px; height:100%; z-index:10001; transition:right 0.35s cubic-bezier(0.4,0,0.2,1); background:rgba(8,11,28,0.95); backdrop-filter:var(--glass-blur-heavy); -webkit-backdrop-filter:var(--glass-blur-heavy); border-left:1px solid var(--glass-border-strong); box-shadow:-12px 0 40px rgba(0,0,0,0.5); display:flex; flex-direction:column;">
+        <div style="padding:24px; border-bottom:1px solid var(--glass-border); display:flex; align-items:center; justify-content:space-between;">
+            <h2 style="font-family:var(--font-heading); font-size:1.2rem;"><i class="fa-solid fa-sliders" style="color:var(--clr-purple);"></i> Settings</h2>
+            <button id="close-settings-panel" style="background:none; border:none; color:var(--text-secondary); font-size:1.4rem; cursor:pointer; line-height:1;">&times;</button>
+        </div>
+        <div style="flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:24px;">
+            <!-- Appearance -->
+            <div>
+                <h4 style="font-family:var(--font-heading); font-size:0.8rem; color:var(--text-muted); letter-spacing:1.5px; margin-bottom:14px;">APPEARANCE</h4>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:14px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:10px;">
+                    <span style="font-family:var(--font-heading); font-size:0.9rem;">Interface Theme</span>
+                    <button id="settings-theme-btn" class="btn btn-secondary" style="padding:6px 16px; font-size:0.8rem;"><i class="fa-solid fa-moon"></i> Toggle</button>
+                </div>
+            </div>
+            <!-- Notifications -->
+            <div>
+                <h4 style="font-family:var(--font-heading); font-size:0.8rem; color:var(--text-muted); letter-spacing:1.5px; margin-bottom:14px;">NOTIFICATIONS</h4>
+                <div style="padding:14px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:10px; display:flex; flex-direction:column; gap:12px;">
+                    <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:0.9rem;">
+                        <input type="checkbox" id="notif-assignments" checked style="accent-color:var(--clr-purple); width:16px; height:16px;">
+                        Assignment alerts
+                    </label>
+                    <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:0.9rem;">
+                        <input type="checkbox" id="notif-forum" checked style="accent-color:var(--clr-purple); width:16px; height:16px;">
+                        Forum discussions
+                    </label>
+                </div>
+            </div>
+            <!-- Account -->
+            <div>
+                <h4 style="font-family:var(--font-heading); font-size:0.8rem; color:var(--text-muted); letter-spacing:1.5px; margin-bottom:14px;">ACCOUNT</h4>
+                <button class="btn btn-secondary" style="width:100%; font-size:0.85rem;" onclick="document.getElementById('profile-widget').click(); document.getElementById('close-settings-panel').click();">
+                    <i class="fa-solid fa-user-pen"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         SUPPORT MODAL
+         ============================================= -->
+    <div class="lms-modal" id="support-modal">
+        <div class="lms-modal-content" style="max-width:520px;">
+            <div class="lms-modal-header">
+                <h2><i class="fa-solid fa-circle-question" style="color:var(--clr-cyan);"></i> Mission Support</h2>
+                <button class="lms-modal-close" id="close-support-modal">&#x2715;</button>
+            </div>
+            <div class="lms-modal-body" style="padding:32px; display:flex; flex-direction:column; gap:24px;">
+                <div style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); border-radius:12px; padding:20px;">
+                    <h4 style="font-family:var(--font-heading); color:var(--clr-cyan); margin-bottom:8px;"><i class="fa-solid fa-book"></i> Quick References</h4>
+                    <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; color:var(--text-secondary); font-size:0.9rem;">
+                        <li><i class="fa-solid fa-chevron-right" style="color:var(--clr-cyan); margin-right:8px;"></i>Use the <strong style="color:#fff;">AI Drawer</strong> (✦ button) for instant course help</li>
+                        <li><i class="fa-solid fa-chevron-right" style="color:var(--clr-cyan); margin-right:8px;"></i>Click <strong style="color:#fff;">Learning Modules</strong> to browse and enroll in courses</li>
+                        <li><i class="fa-solid fa-chevron-right" style="color:var(--clr-cyan); margin-right:8px;"></i>Forum discussions are available inside each Course Deck</li>
+                        <li><i class="fa-solid fa-chevron-right" style="color:var(--clr-cyan); margin-right:8px;"></i>Certificates are issued when course progress reaches 100%</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-family:var(--font-heading); font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px; letter-spacing:1px;">CONTACT COMMAND</h4>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <input type="text" placeholder="Describe your anomaly..." style="padding:10px 14px; background:var(--glass-bg-input); border:1px solid var(--glass-border); border-radius:8px; color:var(--text-primary); font-family:var(--font-body); font-size:0.9rem; outline:none;">
+                        <button class="btn btn-primary" onclick="showToast('Transmission sent to support command!','success'); document.getElementById('support-modal').classList.remove('active');"><i class="fa-solid fa-paper-plane"></i> Transmit Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         COMING SOON MODAL
+         ============================================= -->
+    <div class="lms-modal" id="coming-soon-modal">
+        <div class="lms-modal-content" style="max-width:420px; text-align:center;">
+            <div class="lms-modal-header" style="border-bottom:none; justify-content:flex-end;">
+                <button class="lms-modal-close" id="close-coming-soon">&#x2715;</button>
+            </div>
+            <div class="lms-modal-body" style="padding:20px 40px 40px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+                <div style="font-size:3rem; color:var(--clr-purple); filter:drop-shadow(0 0 12px var(--clr-purple-glow));"><i class="fa-solid fa-rocket"></i></div>
+                <h2 style="font-family:var(--font-heading); font-size:1.6rem;">Incoming Transmission</h2>
+                <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6;">This sector is currently under orbital construction. Our engineering team is calibrating the warp drives — it'll be online soon!</p>
+                <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').classList.remove('active');" style="margin-top:8px; width:100%;">Acknowledged</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glass Toast -->
+    <div class="glass-toast" id="glass-toast"></div>
+
+    <!-- Panel backdrop overlay -->
+    <div id="panel-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:10000;" onclick="closeSlidePanels()"></div>
 
     <!-- Scripts -->
     <script src="app.js"></script>

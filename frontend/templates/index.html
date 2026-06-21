@@ -424,6 +424,26 @@
         </div>
     </div>
 
+    <!-- =============================================
+         COMING SOON MODAL
+         ============================================= -->
+    <div class="lms-modal" id="coming-soon-modal">
+        <div class="lms-modal-content" style="max-width:420px; text-align:center;">
+            <div class="lms-modal-header" style="border-bottom:none; justify-content:flex-end;">
+                <button class="lms-modal-close" id="close-coming-soon">&#x2715;</button>
+            </div>
+            <div class="lms-modal-body" style="padding:20px 40px 40px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+                <div style="font-size:3rem; color:var(--clr-purple); filter:drop-shadow(0 0 12px var(--clr-purple-glow));"><i class="fa-solid fa-rocket"></i></div>
+                <h2 style="font-family:var(--font-heading); font-size:1.6rem;">Incoming Transmission</h2>
+                <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6;">This sector is currently under orbital construction. Our engineering team is calibrating the warp drives — it'll be online soon!</p>
+                <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').classList.remove('active');" style="margin-top:8px; width:100%;">Acknowledged</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glass Toast -->
+    <div class="glass-toast" id="glass-toast"></div>
+
     <!-- Scripts -->
     <script src="app.js"></script>
 </body>

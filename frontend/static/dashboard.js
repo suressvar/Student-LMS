@@ -852,17 +852,300 @@ document.addEventListener('DOMContentLoaded', () => {
     const courseViewModal = document.getElementById('course-view-modal');
     const closeCourseViewBtn = document.getElementById('close-course-view-btn');
 
-    // Sidebar Tab link configurations
+    // ─── TOAST NOTIFICATION UTILITY ──────────────────────────────────────────
+    window.showToast = function(message, type = 'info') {
+        const toast = document.getElementById('glass-toast');
+        if (!toast) return;
+        toast.className = `glass-toast ${type}`;
+        toast.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'circle-check' : type === 'error' ? 'circle-xmark' : 'circle-info'}"></i> ${message}`;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+    };
+
+    // ─── SLIDE PANEL CLOSE UTILITY ───────────────────────────────────────────
+    window.closeSlidePanels = function() {
+        document.getElementById('notifications-panel').style.right = '-420px';
+        document.getElementById('settings-panel').style.right = '-420px';
+        document.getElementById('panel-backdrop').style.display = 'none';
+    };
+
+    function openSlidePanel(panelId) {
+        closeSlidePanels();
+        document.getElementById(panelId).style.right = '0';
+        document.getElementById('panel-backdrop').style.display = 'block';
+    }
+
+    // ─── SIDEBAR NAVIGATION (full wiring) ────────────────────────────────────
+    const allDashPanels = [studentDash, instructorDash, adminDash,
+        document.getElementById('star-maps-panel'),
+        document.getElementById('research-lab-panel'),
+        document.getElementById('archives-panel')
+    ];
+
+    function showDashPanel(panelEl) {
+        allDashPanels.forEach(p => p && (p.style.display = 'none'));
+        if (panelEl) panelEl.style.display = 'block';
+    }
+
+    function restoreMainDash() {
+        allDashPanels.forEach(p => p && (p.style.display = 'none'));
+        if (userRole === 'student' && studentDash) studentDash.style.display = 'block';
+        if (userRole === 'instructor' && instructorDash) instructorDash.style.display = 'block';
+        if (userRole === 'admin' && adminDash) adminDash.style.display = 'block';
+    }
+
     const sidebarLinks = document.querySelectorAll('.sidebar-nav-link');
-    sidebarLinks.forEach((link, idx) => {
-        // We bind the second link (Learning Modules) to open the course catalog!
-        if (idx === 1) {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Update active state
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            const section = link.dataset.section;
+            if (section === 'main') {
+                restoreMainDash();
+            } else if (section === 'catalog') {
+                restoreMainDash();
                 openCatalog();
+            } else if (section === 'star-maps') {
+                showDashPanel(document.getElementById('star-maps-panel'));
+                loadStarMaps();
+            } else if (section === 'research-lab') {
+                showDashPanel(document.getElementById('research-lab-panel'));
+            } else if (section === 'archives') {
+                showDashPanel(document.getElementById('archives-panel'));
+                loadArchives();
+            }
+        });
+    });
+
+    // ─── BELL: Notifications ──────────────────────────────────────────────────
+    document.getElementById('bell-btn')?.addEventListener('click', () => {
+        openSlidePanel('notifications-panel');
+        loadNotifications();
+    });
+    document.getElementById('close-notif-panel')?.addEventListener('click', closeSlidePanels);
+
+    document.getElementById('mark-all-read-btn')?.addEventListener('click', async () => {
+        // Mark all as read via API (best-effort)
+        try {
+            await fetch('/api/notifications/read-all', { method: 'PUT', headers: { 'Authorization': `Bearer ${token}` } });
+        } catch(e) {}
+        loadNotifications();
+        showToast('All transmissions marked as read.', 'success');
+    });
+
+    async function loadNotifications() {
+        const list = document.getElementById('notifications-list');
+        if (!list) return;
+        list.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:40px;"><i class="fa-solid fa-satellite-dish" style="font-size:2rem; display:block; margin-bottom:12px;"></i>Scanning signal bands...</div>';
+        try {
+            const res = await fetch('/api/notifications', { headers: { 'Authorization': `Bearer ${token}` } });
+            const notifs = await res.json();
+            if (!res.ok || notifs.length === 0) {
+                list.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:40px;"><i class="fa-solid fa-inbox" style="font-size:2rem; display:block; margin-bottom:12px;"></i>No transmissions received.</div>';
+                return;
+            }
+            list.innerHTML = notifs.map(n => `
+                <div style="background:${n.is_read ? 'rgba(255,255,255,0.02)' : 'rgba(139,92,246,0.08)'}; border:1px solid ${n.is_read ? 'rgba(255,255,255,0.06)' : 'rgba(139,92,246,0.2)'}; border-radius:10px; padding:14px 16px;">
+                    <p style="font-size:0.88rem; color:${n.is_read ? 'var(--text-secondary)' : '#fff'}; line-height:1.5; margin-bottom:6px;">${n.message}</p>
+                    <span style="font-size:0.72rem; color:var(--text-muted);"><i class="fa-regular fa-clock"></i> ${new Date(n.created_at).toLocaleString()}</span>
+                </div>
+            `).join('');
+        } catch(e) {
+            list.innerHTML = '<div style="color:var(--clr-pink); text-align:center; padding:20px;">Signal failure.</div>';
+        }
+    }
+
+    // ─── SETTINGS GEAR ───────────────────────────────────────────────────────
+    document.getElementById('settings-btn')?.addEventListener('click', () => openSlidePanel('settings-panel'));
+    document.getElementById('close-settings-panel')?.addEventListener('click', closeSlidePanels);
+    document.getElementById('settings-theme-btn')?.addEventListener('click', () => {
+        document.getElementById('theme-toggle-btn')?.click();
+    });
+
+    // ─── SUPPORT LINK ─────────────────────────────────────────────────────────
+    document.getElementById('support-link')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('support-modal')?.classList.add('active');
+    });
+    document.getElementById('close-support-modal')?.addEventListener('click', () => {
+        document.getElementById('support-modal')?.classList.remove('active');
+    });
+
+    // ─── FOOTER DEAD LINKS → COMING SOON ─────────────────────────────────────
+    document.getElementById('footer-right-links')?.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('coming-soon-modal')?.classList.add('active');
+        });
+    });
+    document.getElementById('close-coming-soon')?.addEventListener('click', () => {
+        document.getElementById('coming-soon-modal')?.classList.remove('active');
+    });
+    document.getElementById('close-profile-card')?.addEventListener('click', () => {
+        document.getElementById('profile-card-popover').style.display = 'none';
+        document.getElementById('profile-card-popover').classList.remove('active');
+    });
+
+    // ─── SEARCH (debounced) ──────────────────────────────────────────────────
+    const searchInput = document.getElementById('dash-search-input');
+    const searchDropdown = document.getElementById('search-dropdown');
+    let searchTimer;
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        const q = searchInput.value.trim();
+        if (q.length < 2) { searchDropdown.style.display = 'none'; return; }
+        searchTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.courses.length === 0) {
+                    searchDropdown.innerHTML = '<div style="padding:14px 16px; color:var(--text-muted); font-size:0.85rem;">No courses found in sector.</div>';
+                } else {
+                    searchDropdown.innerHTML = data.courses.map(c => `
+                        <div onclick="searchDropdown.style.display=\'none\'; viewEnrolledCourse(${c.id}); openCatalog();" style="padding:12px 16px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,0.06); transition:background 0.2s;" onmouseover="this.style.background='rgba(139,92,246,0.1)'" onmouseout="this.style.background='transparent'">
+                            <div style="font-family:var(--font-heading); font-size:0.88rem; color:#fff; margin-bottom:2px;">${c.title}</div>
+                            <div style="font-size:0.75rem; color:var(--clr-cyan);">${c.category}</div>
+                        </div>
+                    `).join('');
+                }
+                searchDropdown.style.display = 'block';
+            } catch(e) {
+                searchDropdown.style.display = 'none';
+            }
+        }, 300);
+    });
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-box')) searchDropdown.style.display = 'none';
+    });
+
+    // ─── PROFILE CARD POPOVER (Task 4) ───────────────────────────────────────
+    document.getElementById('profile-widget')?.addEventListener('click', async () => {
+        const popover = document.getElementById('profile-card-popover');
+        if (!popover) return;
+        try {
+            const res = await fetch('/api/auth/profile', { headers: { 'Authorization': `Bearer ${token}` } });
+            const profile = await res.json();
+            if (!res.ok) return;
+            document.getElementById('pc-name').textContent = profile.name;
+            document.getElementById('pc-role').textContent = profile.role.toUpperCase();
+            document.getElementById('pc-level').textContent = profile.level;
+            document.getElementById('pc-xp').textContent = profile.xp;
+            document.getElementById('pc-email').textContent = profile.email;
+            document.getElementById('pc-edit-name').value = profile.name;
+            const avatarEl = document.getElementById('pc-avatar');
+            if (profile.avatar_svg) avatarEl.innerHTML = profile.avatar_svg;
+        } catch(e) {
+            // Still show popover with cached data
+        }
+        popover.style.display = 'flex';
+        popover.classList.add('active');
+    });
+
+    document.getElementById('profile-edit-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newName = document.getElementById('pc-edit-name').value.trim();
+        if (!newName) return;
+        try {
+            const res = await fetch('/api/auth/profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ name: newName })
             });
+            const data = await res.json();
+            if (res.ok) {
+                // Update localStorage
+                const updatedUser = { ...user, name: data.user.name };
+                localStorage.setItem('courseverse_user', JSON.stringify(updatedUser));
+                // Update header display
+                document.getElementById('user-profile-name').textContent = data.user.name;
+                document.getElementById('pc-name').textContent = data.user.name;
+                showToast(`Callsign updated to: ${data.user.name}`, 'success');
+            } else {
+                showToast(data.error || 'Update failed.', 'error');
+            }
+        } catch(e) {
+            showToast('Update transmission failure.', 'error');
         }
     });
+
+    // ─── STAR MAPS PANEL: Enrolled courses as visual cards ───────────────────
+    async function loadStarMaps() {
+        const grid = document.getElementById('star-maps-grid');
+        if (!grid || userRole !== 'student') return;
+        grid.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite-dish" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Calibrating orbital trajectory maps...</div>';
+        try {
+            const res = await fetch('/api/courses/enrolled', { headers: { 'Authorization': `Bearer ${token}` } });
+            const courses = await res.json();
+            if (!res.ok || courses.length === 0) {
+                grid.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-moon" style="font-size:2rem; margin-bottom:16px; display:block;"></i>No active learning trajectories. Enlist in courses to populate your star map.</div>';
+                return;
+            }
+            grid.innerHTML = courses.map(c => {
+                const pct = c.progress || 0;
+                const circumference = 2 * Math.PI * 38;
+                const offset = circumference * (1 - pct / 100);
+                return `
+                <div class="dash-card" style="padding:24px; cursor:pointer;" onclick="viewEnrolledCourse(${c.id})">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+                        <div>
+                            <span style="font-size:0.72rem; color:var(--clr-cyan); font-family:var(--font-heading); letter-spacing:1px;">${c.category}</span>
+                            <h3 style="font-family:var(--font-heading); font-size:1rem; margin-top:4px; color:#fff;">${c.title}</h3>
+                        </div>
+                        <svg width="70" height="70" style="flex-shrink:0;">
+                            <circle cx="35" cy="35" r="28" stroke="rgba(255,255,255,0.06)" stroke-width="6" fill="transparent"/>
+                            <circle cx="35" cy="35" r="28" stroke="#8b5cf6" stroke-width="6" fill="transparent"
+                                stroke-dasharray="${circumference.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"
+                                stroke-linecap="round" transform="rotate(-90 35 35)"/>
+                            <text x="35" y="40" text-anchor="middle" fill="#fff" font-size="12" font-family="Space Grotesk" font-weight="600">${pct}%</text>
+                        </svg>
+                    </div>
+                    <div style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:16px;"><i class="fa-solid fa-user-astronaut"></i> ${c.instructor_name || 'Academic Core'}</div>
+                    <div style="background:rgba(255,255,255,0.06); border-radius:4px; height:4px; overflow:hidden;">
+                        <div style="height:100%; width:${pct}%; background:linear-gradient(90deg,var(--clr-purple),var(--clr-cyan)); border-radius:4px;"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        } catch(e) {
+            grid.innerHTML = '<div style="color:var(--clr-pink); text-align:center; padding:40px; grid-column:1/-1;">Signal failure retrieving trajectories.</div>';
+        }
+    }
+
+    // ─── ARCHIVES PANEL: Completed courses ───────────────────────────────────
+    async function loadArchives() {
+        const grid = document.getElementById('archives-grid');
+        if (!grid || userRole !== 'student') return;
+        grid.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-satellite" style="font-size:2rem; margin-bottom:16px; display:block;"></i>Scanning academy records...</div>';
+        try {
+            const res = await fetch('/api/courses/completed', { headers: { 'Authorization': `Bearer ${token}` } });
+            const courses = await res.json();
+            if (!res.ok || courses.length === 0) {
+                grid.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:60px; grid-column:1/-1;"><i class="fa-solid fa-box-open" style="font-size:2rem; margin-bottom:16px; display:block;"></i>No completed courses yet. Keep learning to fill your archives!</div>';
+                return;
+            }
+            grid.innerHTML = courses.map(c => `
+                <div class="dash-card" style="padding:24px;">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                        <div style="width:44px; height:44px; border-radius:50%; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.3); display:flex; align-items:center; justify-content:center; color:#10b981; font-size:1.2rem;"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <h3 style="font-family:var(--font-heading); font-size:0.95rem; color:#fff; margin-bottom:2px;">${c.title}</h3>
+                            <span style="font-size:0.72rem; color:var(--clr-cyan);">${c.category}</span>
+                        </div>
+                    </div>
+                    <div style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:16px;"><i class="fa-solid fa-user-astronaut"></i> ${c.instructor_name || 'Academic Core'}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.72rem; color:#10b981; font-family:var(--font-heading);">✓ COMPLETED</span>
+                        <button class="btn btn-secondary" style="padding:5px 14px; font-size:0.75rem;" onclick="generateStellarCertificate('${c.title.replace(/'/g, "\\'")}')"><i class="fa-solid fa-certificate"></i> Certificate</button>
+                    </div>
+                </div>`).join('');
+        } catch(e) {
+            grid.innerHTML = '<div style="color:var(--clr-pink); text-align:center; padding:40px; grid-column:1/-1;">Signal failure retrieving archives.</div>';
+        }
+    }
 
     // Enlist / New Mission buttons open the catalog as well
     document.querySelector('.sidebar-action-btn')?.addEventListener('click', openCatalog);
@@ -945,15 +1228,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const data = await response.json();
             if (response.ok) {
-                alert('Course coordinates successfully locked into your nav-mesh!');
+                showToast('Course coordinates locked into your nav-mesh!', 'success');
                 loadCourseCatalog();
                 fetchTelemetry();
             } else {
-                alert(data.error || 'Enrollment failure.');
+                showToast(data.error || 'Enrollment failure.', 'error');
             }
         } catch (err) {
             console.error(err);
-            alert('Warp coupling enrollment failure.');
+            showToast('Warp coupling enrollment failure.', 'error');
         }
     };
 

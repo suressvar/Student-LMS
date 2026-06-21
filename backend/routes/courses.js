@@ -41,7 +41,28 @@ router.get('/enrolled', authenticateToken, authorizeRoles('student'), async (req
     }
 });
 
-// 3. Get specific course details with modules, assignments, and quizzes
+// 3. Get student's completed courses (progress = 100)
+router.get('/completed', authenticateToken, authorizeRoles('student'), async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT e.progress, e.velocity, e.time_spent, e.created_at as enrolled_at, e.updated_at as completed_at,
+                    c.id, c.title, c.category, c.description, c.image_url, c.learning_outcomes,
+                    u.name as instructor_name
+             FROM enrollments e
+             INNER JOIN courses c ON e.course_id = c.id
+             LEFT JOIN users u ON c.instructor_id = u.id
+             WHERE e.student_id = $1 AND e.progress = 100
+             ORDER BY e.updated_at DESC`,
+            [req.user.id]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error fetching completed academy tracks.' });
+    }
+});
+
+// 4. Get specific course details with modules, assignments, and quizzes
 router.get('/:id', authenticateToken, async (req, res) => {
     const courseId = req.params.id;
     try {

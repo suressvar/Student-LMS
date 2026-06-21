@@ -777,4 +777,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /* ==========================================
+       9. LANDING PAGE DEAD LINKS WIRING (Task 3)
+       ========================================== */
+    if (!window.showToast) {
+        window.showToast = function(message, type = 'info') {
+            const toast = document.getElementById('glass-toast');
+            if (!toast) return;
+            toast.className = `glass-toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'circle-check' : type === 'error' ? 'circle-xmark' : 'circle-info'}"></i> ${message}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        };
+    }
+
+    const isLandingPage = document.querySelector('.hero-section') !== null;
+
+    if (isLandingPage) {
+        // Bell and Settings Buttons
+        document.getElementById('bell-btn')?.addEventListener('click', () => {
+            showToast('Please login to view transmissions.', 'info');
+        });
+        document.getElementById('settings-btn')?.addEventListener('click', () => {
+            showToast('Please login to access settings.', 'info');
+        });
+
+        // Search Input on Landing Page
+        const searchInput = document.getElementById('search-constellations');
+        searchInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                showToast('Login required to search the galaxy.', 'info');
+            }
+        });
+
+        // Coming Soon Modal toggle
+        function showComingSoon(e) {
+            e.preventDefault();
+            document.getElementById('coming-soon-modal')?.classList.add('active');
+        }
+
+        document.getElementById('close-coming-soon')?.addEventListener('click', () => {
+            document.getElementById('coming-soon-modal')?.classList.remove('active');
+        });
+
+        // Pricing Nav Link
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === '#pricing') {
+                link.addEventListener('click', showComingSoon);
+            }
+        });
+
+        // Footer links and Social Links
+        const footerLinks = document.querySelectorAll('.footer-links-list a, .footer-bottom-links a, .social-links a');
+        footerLinks.forEach(link => {
+            link.addEventListener('click', showComingSoon);
+        });
+    }
+
 });

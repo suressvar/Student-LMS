@@ -4,8 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { pool } = require('../../db/db');
 const { authenticateToken } = require('../middleware/auth');
+const { OAuth2Client } = require('google-auth-library');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'courseverse_galactic_secret_2026';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // 1. Student / Instructor Registration
 router.post('/register', async (req, res) => {
@@ -195,6 +198,86 @@ router.post('/reset-password', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error during security key reset.' });
+    }
+});
+
+// 6. Google Sign-In
+router.post('/google', async (req, res) => {
+    const { credential } = req.body;
+    if (!credential) {
+        return res.status(400).json({ error: 'Google credential token is required.' });
+    }
+
+    if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+        return res.status(503).json({ error: 'Google Sign-In is not configured. Please set GOOGLE_CLIENT_ID in .env.' });
+    }
+
+    try {
+        // Verify the Google ID token
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // Look up user by google_id first, then email
+        let result = await pool.query(
+            'SELECT * FROM users WHERE google_id = $1 OR email = $2',
+            [googleId, email]
+        );
+
+        let user;
+        if (result.rows.length > 0) {
+            user = result.rows[0];
+            // If found by email but google_id not linked yet, link it
+            if (!user.google_id) {
+                await pool.query(
+                    'UPDATE users SET google_id = $1, auth_provider = $2 WHERE id = $3',
+                    [googleId, 'google', user.id]
+                );
+            }
+        } else {
+            // Auto-register new Google user as student
+            const avatarSvg = `
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="46" fill="#131b35" stroke="#8b5cf6" stroke-width="2"/>
+                    <circle cx="50" cy="38" r="14" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                    <path d="M25,78 Q50,60 75,78" fill="none" stroke="#06b6d4" stroke-width="2"/>
+                </svg>
+            `;
+            const insertRes = await pool.query(
+                `INSERT INTO users (name, email, google_id, auth_provider, role, level, xp, avatar_svg, password_hash)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NULL)
+                 RETURNING id, name, email, role, level, xp`,
+                [name, email, googleId, 'google', 'student', 1, 0, avatarSvg]
+            );
+            user = insertRes.rows[0];
+        }
+
+        // Issue JWT
+        const token = jwt.sign(
+            { id: user.id, name: user.name, email: user.email, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.json({
+            message: 'Google warp-link verified. Access Granted.',
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                level: user.level,
+                xp: user.xp,
+                avatar_svg: user.avatar_svg
+            }
+        });
+    } catch (err) {
+        console.error('Google auth error:', err);
+        res.status(401).json({ error: 'Invalid Google credential. Access denied.' });
     }
 });
 
