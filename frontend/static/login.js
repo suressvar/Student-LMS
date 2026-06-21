@@ -28,17 +28,52 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================
        2. ROLE SELECTION TABS
        ========================================== */
-    const roleTabs = document.querySelectorAll('.role-tab');
-    let currentRole = 'student';
+    let currentLoginRole = 'student';
+    let currentSignupRole = 'student';
 
-    roleTabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            roleTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            currentRole = tab.getAttribute('data-role');
+    const loginRoleSelector = document.querySelector('#login-form-block .role-selector');
+    const signupRoleSelector = document.querySelector('#signup-form-block .role-selector');
+
+    if (loginRoleSelector) {
+        const tabs = loginRoleSelector.querySelectorAll('.role-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentLoginRole = tab.getAttribute('data-role');
+            });
         });
-    });
+    }
+
+    if (signupRoleSelector) {
+        const tabs = signupRoleSelector.querySelectorAll('.role-tab');
+        const signupSubtitle = document.querySelector('#signup-form-block .login-subtitle');
+        const signupNameLabel = document.getElementById('signup-name-label');
+        const signupNameInput = document.getElementById('signup-name');
+        const signupSubmitBtn = document.querySelector('#portal-signup-form .warp-submit-btn');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentSignupRole = tab.getAttribute('data-role');
+
+                if (currentSignupRole === 'instructor') {
+                    if (signupSubtitle) signupSubtitle.textContent = 'Enter your details to register as a new CourseVerse instructor.';
+                    if (signupNameLabel) signupNameLabel.textContent = 'Instructor Name / Callsign';
+                    if (signupNameInput) signupNameInput.placeholder = 'Dr. Grayson';
+                    if (signupSubmitBtn) signupSubmitBtn.textContent = 'Authorize Instructor';
+                } else {
+                    if (signupSubtitle) signupSubtitle.textContent = 'Enter your details to register as a new CourseVerse cadet.';
+                    if (signupNameLabel) signupNameLabel.textContent = 'Cadet Callsign';
+                    if (signupNameInput) signupNameInput.placeholder = 'Alex Grayson';
+                    if (signupSubmitBtn) signupSubmitBtn.textContent = 'Authorize Cadet';
+                }
+            });
+        });
+    }
 
 
     /* ==========================================
@@ -90,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, role: currentRole })
+                    body: JSON.stringify({ email, password, role: currentLoginRole })
                 });
                 
                 const data = await response.json();
@@ -101,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 localStorage.setItem('courseverse_token', data.token);
                 localStorage.setItem('courseverse_user', JSON.stringify(data.user));
-                sessionStorage.setItem('courseverse_role', currentRole);
+                sessionStorage.setItem('courseverse_role', currentLoginRole);
                 initiateWarpSequence();
             } catch (err) {
                 console.error(err);
@@ -121,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role: 'student' })
+                    body: JSON.stringify({ name, email, password, role: currentSignupRole })
                 });
                 
                 const data = await response.json();
@@ -132,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 localStorage.setItem('courseverse_token', data.token);
                 localStorage.setItem('courseverse_user', JSON.stringify(data.user));
-                sessionStorage.setItem('courseverse_role', 'student');
+                sessionStorage.setItem('courseverse_role', currentSignupRole);
                 initiateWarpSequence();
             } catch (err) {
                 console.error(err);
@@ -142,7 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initiateWarpSequence() {
-        if (warpActive || !warpCanvas || !warpCtx) return;
+        if (warpActive) return;
+        
+        if (!warpCanvas || !warpCtx) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
         
         warpActive = true;
         warpCanvas.classList.add('active');

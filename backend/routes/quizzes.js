@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../db');
+const { pool } = require('../../db/db');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
 
 // 1. Get quizzes for a course

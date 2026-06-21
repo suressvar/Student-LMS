@@ -225,12 +225,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Escape closes modals
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            closeTerminal();
-            closeStarMap();
+            if (terminalModal) closeTerminal();
+            if (starMapModal) closeStarMap();
         }
     });
 
     function openTerminal() {
+        if (!terminalModal) return;
         terminalModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         resetTerminal();
@@ -238,17 +239,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeTerminal() {
+        if (!terminalModal) return;
         terminalModal.classList.remove('active');
         document.body.style.overflow = '';
     }
 
     function openStarMap() {
+        if (!starMapModal) return;
         starMapModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         setTimeout(initStarMapCanvas, 100); // Wait for styling/sizing
     }
 
     function closeStarMap() {
+        if (!starMapModal) return;
         starMapModal.classList.remove('active');
         document.body.style.overflow = '';
     }

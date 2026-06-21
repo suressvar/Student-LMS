@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const { initDb } = require('./db');
+const { initDb } = require('../db/db');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +13,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Request logging middleware for debugging
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    if (req.body && Object.keys(req.body).length > 0) {
+        const maskedBody = { ...req.body };
+        if (maskedBody.password) maskedBody.password = '********';
+        console.log('  Body:', maskedBody);
+    }
+    next();
+});
+
 // Serve file uploads securely
 const fs = require('fs');
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -21,8 +32,9 @@ if (!fs.existsSync(uploadsDir)){
 }
 app.use('/uploads', express.static(uploadsDir));
 
-// Serve static frontend files from workspace root
-app.use(express.static(path.join(__dirname)));
+// Serve static frontend files and HTML templates
+app.use(express.static(path.join(__dirname, '../frontend/static')));
+app.use(express.static(path.join(__dirname, '../frontend/templates')));
 
 // Initialize database tables and relations
 initDb();
@@ -39,8 +51,8 @@ app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/notifications', require('./routes/notifications'));
 
 // Fallback to index.html for undefined requests
-app.get('/:path*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/templates/index.html'));
 });
 
 // Start listening

@@ -100,10 +100,16 @@
                     <h1 class="login-title">Request Permit</h1>
                     <p class="login-subtitle">Enter your details to register as a new CourseVerse cadet.</p>
                     
+                    <!-- Role Tabs for Signup -->
+                    <div class="role-selector">
+                        <button type="button" class="role-tab active" data-role="student">Student</button>
+                        <button type="button" class="role-tab" data-role="instructor">Instructor</button>
+                    </div>
+                    
                     <form class="portal-form" id="portal-signup-form">
                         <!-- Callsign Field -->
                         <div class="input-group">
-                            <label class="input-label">Cadet Callsign</label>
+                            <label class="input-label" id="signup-name-label">Cadet Callsign</label>
                             <div class="input-wrapper">
                                 <span class="input-icon"><i class="fa-solid fa-user-astronaut"></i></span>
                                 <input type="text" class="form-input" id="signup-name" placeholder="Alex Grayson" required>
