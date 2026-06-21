@@ -85,8 +85,13 @@ app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/templates/index.html'));
 });
 
-// Start listening
-app.listen(PORT, () => {
-    console.log(`CourseVerse Server running on port ${PORT}`);
-    console.log(`Interface available at http://localhost:${PORT}`);
-});
+// Export app for serverless platforms like Vercel
+module.exports = app;
+
+// Start listening only if run directly (not required as a module)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`CourseVerse Server running on port ${PORT}`);
+        console.log(`Interface available at http://localhost:${PORT}`);
+    });
+}
