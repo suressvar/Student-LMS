@@ -48,17 +48,8 @@ async function initDb() {
             console.log('Seeding default users...');
             const salt = bcrypt.genSaltSync(10);
             
-            const adminPass = bcrypt.hashSync('admin123', salt);
             const instructorPass = bcrypt.hashSync('instructor123', salt);
             const studentPass = bcrypt.hashSync('student123', salt);
-
-            // Insert admin
-            const adminRes = await client.query(
-                `INSERT INTO users (name, email, password_hash, role, level, xp) 
-                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-                ['Cmdr. Stardust', 'admin@galaxy.edu', adminPass, 'admin', 84, 8400]
-            );
-            const adminId = adminRes.rows[0].id;
 
             // Insert instructor
             const instructorRes = await client.query(

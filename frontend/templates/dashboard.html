@@ -12,8 +12,8 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Style Sheets -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="dashboard.css?v=2">
 </head>
 <body class="dashboard-body">
 
@@ -23,7 +23,10 @@
     <!-- Side Navigation Bar -->
     <aside class="dashboard-sidebar">
         <div class="sidebar-brand">
-            <a href="index.html" class="sidebar-logo">CourseVerse</a>
+            <a href="index.html" class="sidebar-logo">
+                <i class="fa-solid fa-shuttle-space logo-icon" style="font-size: 1.35rem;"></i>
+                <span>CourseVerse</span>
+            </a>
             <span class="sidebar-sub">DEEP SPACE LEARNING</span>
         </div>
         
@@ -419,210 +422,7 @@
                 </div>
             </div>
 
-            <!-- ========================================================
-                 DASHBOARD 3: ADMIN VIEW ("Intelligence Center")
-                 ======================================================== -->
-            <div class="role-dashboard-wrapper" id="admin-dash">
-                <div class="admin-grid">
-                    
-                    <!-- Top Wide: Global Telemetry Map -->
-                    <div class="dash-card telemetry-card">
-                        <div class="telemetry-header">
-                            <div class="telemetry-info-text">
-                                <span class="tel-tag"><i class="fa-solid fa-globe"></i> GLOBAL FLEET TELEMETRY</span>
-                                <h2 class="tel-title">Interactive User Distribution Map</h2>
-                                <p class="tel-desc">Real-time visualization of academic agents currently active across the Andromeda and Milky Way sectors.</p>
-                            </div>
-                            <div class="telemetry-counters">
-                                <div class="tel-counter">
-                                    <span>TOTAL NODES</span>
-                                    <strong>12,842</strong>
-                                </div>
-                                <div class="tel-counter">
-                                    <span>NEW SIGNALS</span>
-                                    <strong class="text-cyan">+148</strong>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Telemetry Galaxy Map Canvas -->
-                        <div class="telemetry-canvas-container">
-                            <canvas id="galaxy-map-canvas"></canvas>
-                        </div>
-                    </div>
 
-                    <!-- Middle Column Left: Circular Compute & Storage Analytics -->
-                    <div class="analytics-row-cards">
-                        <!-- Compute Card -->
-                        <div class="dash-card analytic-circle-card">
-                            <div class="circle-chart-wrapper">
-                                <svg class="circle-svg" width="120" height="120">
-                                    <circle class="circle-bg" stroke="rgba(255,255,255,0.04)" stroke-width="8" fill="transparent" r="46" cx="60" cy="60"/>
-                                    <circle class="circle-fill stroke-purple" stroke="#8b5cf6" stroke-width="8" stroke-dasharray="289.02" stroke-dashoffset="52.02" fill="transparent" r="46" cx="60" cy="60"/>
-                                </svg>
-                                <div class="circle-val-text">82%</div>
-                            </div>
-                            <h4 class="analytic-title-lbl">CLOUD COMPUTE</h4>
-                            <p class="analytic-desc-text">Deep-core processing at peak efficiency. Parallel threads executing mission configurations.</p>
-                            <a href="#" class="analytic-link">Manage Allocation <i class="fa-solid fa-angle-right"></i></a>
-                        </div>
-
-                        <!-- Storage Card -->
-                        <div class="dash-card analytic-circle-card">
-                            <div class="circle-chart-wrapper">
-                                <svg class="circle-svg" width="120" height="120">
-                                    <circle class="circle-bg" stroke="rgba(255,255,255,0.04)" stroke-width="8" fill="transparent" r="46" cx="60" cy="60"/>
-                                    <circle class="circle-fill stroke-cyan" stroke="#06b6d4" stroke-width="8" stroke-dasharray="289.02" stroke-dashoffset="158.96" fill="transparent" r="46" cx="60" cy="60"/>
-                                </svg>
-                                <div class="circle-val-text">45%</div>
-                            </div>
-                            <h4 class="analytic-title-lbl">QUANTUM STORAGE</h4>
-                            <p class="analytic-desc-text">Archive capacity optimized. Data fragmentation reduced by 14% since last maintenance check.</p>
-                            <a href="#" class="analytic-link">View Archives <i class="fa-solid fa-angle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Middle Column Right: Anomalies Panel -->
-                    <div class="dash-card anomalies-card">
-                        <div class="anomalies-header">
-                            <h3><i class="fa-solid fa-triangle-exclamation"></i> Critical Anomalies</h3>
-                            <span class="anomalies-badge">12 UNRESOLVED</span>
-                        </div>
-                        
-                        <div class="anomalies-list">
-                            <!-- Anomaly 1: Critical -->
-                            <div class="anomaly-item">
-                                <div class="anomaly-meta">
-                                    <span class="anomaly-code">CODE: XA-421</span>
-                                    <span class="anomaly-severity critical">CRITICAL</span>
-                                </div>
-                                <h4 class="anomaly-title">Signal Distortion: Sector 9</h4>
-                                <p class="anomaly-desc">Learning node 9-Beta reports recursive loop cycle, immediate intervention requested.</p>
-                                <div class="anomaly-actions">
-                                    <button class="btn-anomaly primary">Isolate</button>
-                                    <button class="btn-anomaly">Dismiss</button>
-                                </div>
-                            </div>
-
-                            <!-- Anomaly 2: Moderate -->
-                            <div class="anomaly-item">
-                                <div class="anomaly-meta">
-                                    <span class="anomaly-code">CODE: RT-900</span>
-                                    <span class="anomaly-severity moderate">MODERATE</span>
-                                </div>
-                                <h4 class="anomaly-title">Entropy Warning: Data Core</h4>
-                                <p class="anomaly-desc">Mirror packet loss detected in the starmap syncing service buffer.</p>
-                                <div class="anomaly-actions">
-                                    <button class="btn-anomaly primary text-cyan">Repair</button>
-                                    <button class="btn-anomaly">Dismiss</button>
-                                </div>
-                            </div>
-
-                            <!-- Anomaly 3: Low -->
-                            <div class="anomaly-item">
-                                <div class="anomaly-meta">
-                                    <span class="anomaly-code">CODE: ZT-114</span>
-                                    <span class="anomaly-severity low">LOW</span>
-                                </div>
-                                <h4 class="anomaly-title">User Auth Outlier</h4>
-                                <p class="anomaly-desc">Login attempt flagged from unauthorized quadrant 14, Protocol 4 initiated.</p>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-secondary anomalies-btn">OPEN FULL QUEUE</button>
-                    </div>
-
-                    <!-- Bottom Row Left: Data Velocity Wave Graph -->
-                    <div class="dash-card velocity-graph-card">
-                        <div class="vel-header">
-                            <div class="vel-info-titles">
-                                <h3>Data Velocity</h3>
-                                <p>Global throughput across all learning nodes</p>
-                            </div>
-                            <div class="vel-value-box">
-                                <span class="val-num">472 <span class="val-unit">GB/s</span></span>
-                                <span class="val-percentage"><i class="fa-solid fa-arrow-trend-up"></i> +12.4% vs last hr</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Smooth wave path Canvas -->
-                        <div class="vel-canvas-container">
-                            <canvas id="data-velocity-canvas"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Row Right: Action Center -->
-                    <div class="dash-card action-center-card">
-                        <h4>COMMAND CENTER</h4>
-                        <div class="actions-grid">
-                            <button class="action-btn-huge">
-                                <i class="fa-solid fa-terminal"></i>
-                                <span>REMOTE SHELL</span>
-                            </button>
-                            <button class="action-btn-huge">
-                                <i class="fa-solid fa-tower-broadcast"></i>
-                                <span>BROADCAST</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Wide Table: Fleet Activity Logs -->
-                    <div class="dash-card activity-table-card">
-                        <div class="table-header">
-                            <div class="table-title">
-                                <h3>Recent Fleet Activity</h3>
-                                <p>Audited logs from the past 12 interstellar cycles</p>
-                            </div>
-                            <button class="btn btn-secondary export-btn">EXPORT JSON</button>
-                        </div>
-                        
-                        <div class="table-responsive">
-                            <table class="logs-table">
-                                <thead>
-                                    <tr>
-                                        <th>OPERATION</th>
-                                        <th>SOURCE NODE</th>
-                                        <th>TIME (UTC)</th>
-                                        <th>STATUS</th>
-                                        <th>LATENCY</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Quantum Hash Verification</strong></td>
-                                        <td>Central Core 01</td>
-                                        <td>14:22:08</td>
-                                        <td><span class="status-pill status-success"><span class="dot"></span> SUCCESS</span></td>
-                                        <td>12ms</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Nebula-Sync Indexing</strong></td>
-                                        <td>Outpost-Echo</td>
-                                        <td>14:18:52</td>
-                                        <td><span class="status-pill status-success"><span class="dot"></span> SUCCESS</span></td>
-                                        <td>420ms</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Neural Pattern Upload</strong></td>
-                                        <td>Agent-Rykard</td>
-                                        <td>14:15:19</td>
-                                        <td><span class="status-pill status-processing"><span class="dot"></span> PROCESSING</span></td>
-                                        <td>88ms</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Firewall Breach Deflection</strong></td>
-                                        <td>Shield-Gate-4</td>
-                                        <td>13:58:33</td>
-                                        <td><span class="status-pill status-secured"><span class="dot"></span> SECURED</span></td>
-                                        <td>2ms</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
 
             <!-- ========================================================
                  STAR MAPS SECTION PANEL
@@ -679,10 +479,7 @@
                 <span class="status-pulse-dot"></span> NEURAL LINK STABLE
             </div>
 
-            <div class="footer-right-links" id="footer-right-links">
-                <a href="#">Privacy Protocol</a>
-                <a href="#">Safety Systems</a>
-            </div>
+
         </footer>
 
     </main>
@@ -918,22 +715,7 @@
         </div>
     </div>
 
-    <!-- =============================================
-         COMING SOON MODAL
-         ============================================= -->
-    <div class="lms-modal" id="coming-soon-modal">
-        <div class="lms-modal-content" style="max-width:420px; text-align:center;">
-            <div class="lms-modal-header" style="border-bottom:none; justify-content:flex-end;">
-                <button class="lms-modal-close" id="close-coming-soon">&#x2715;</button>
-            </div>
-            <div class="lms-modal-body" style="padding:20px 40px 40px; display:flex; flex-direction:column; align-items:center; gap:16px;">
-                <div style="font-size:3rem; color:var(--clr-purple); filter:drop-shadow(0 0 12px var(--clr-purple-glow));"><i class="fa-solid fa-rocket"></i></div>
-                <h2 style="font-family:var(--font-heading); font-size:1.6rem;">Incoming Transmission</h2>
-                <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6;">This sector is currently under orbital construction. Our engineering team is calibrating the warp drives — it'll be online soon!</p>
-                <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').classList.remove('active');" style="margin-top:8px; width:100%;">Acknowledged</button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Glass Toast -->
     <div class="glass-toast" id="glass-toast"></div>
@@ -942,6 +724,7 @@
     <div id="panel-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:10000;" onclick="closeSlidePanels()"></div>
 
     <!-- Scripts -->
+    <script src="bg3d.js"></script>
     <script src="app.js"></script>
     <script src="dashboard.js"></script>
 </body>

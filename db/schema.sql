@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('student', 'instructor', 'admin')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('student', 'instructor')),
     level INT DEFAULT 1,
     xp INT DEFAULT 0,
     avatar_svg TEXT,

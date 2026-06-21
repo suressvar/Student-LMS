@@ -201,6 +201,11 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+// 5.5 Get Google Client ID for Frontend
+router.get('/google/client-id', (req, res) => {
+    res.json({ clientId: GOOGLE_CLIENT_ID });
+});
+
 // 6. Google Sign-In
 router.post('/google', async (req, res) => {
     const { credential } = req.body;

@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Select dashboard wrappers
     const studentDash = document.getElementById('student-dash');
     const instructorDash = document.getElementById('instructor-dash');
-    const adminDash = document.getElementById('admin-dash');
     
     // Header UI nodes
     const headerTitle = document.getElementById('dash-header-title');
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Footer UI nodes
     const footerLeftInfo = document.getElementById('footer-left-info');
-    const footerRightLinks = document.getElementById('footer-right-links');
 
     // Display correct dashboard and configure details
     if (userRole === 'student') {
@@ -45,12 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (footerLeftInfo) {
             footerLeftInfo.innerHTML = `COURSEVERSE COMMAND CENTER v2.8.4 <span class="footer-sync-time">LAST SYNC: 14:02 STARDATE:442.1</span>`;
         }
-        if (footerRightLinks) {
-            footerRightLinks.innerHTML = `
-                <a href="#">Privacy Protocol</a>
-                <a href="#">Safety Systems</a>
-            `;
-        }
+
 
         // Initialize student specific canvas
         initConstellationCanvas();
@@ -79,50 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (footerLeftInfo) {
             footerLeftInfo.innerHTML = `© 2245 COURSEVERSE ACADEMY • GALACTIC STANDARD TIME`;
         }
-        if (footerRightLinks) {
-            footerRightLinks.innerHTML = `
-                <a href="#">Mission Logs</a>
-                <a href="#">Privacy Nebula</a>
-                <a href="#">Comm-Link</a>
-            `;
-        }
 
-    } else if (userRole === 'admin') {
-        if (adminDash) adminDash.style.display = 'block';
-        
-        // Populate header details
-        if (headerTitle) headerTitle.textContent = "Intelligence Center";
-        if (profileName) profileName.textContent = user.name;
-        if (profileLevel) profileLevel.textContent = `Lvl ${user.level} Explorer`;
-        if (profileAvatar) {
-            profileAvatar.style.borderColor = '#ec4899';
-            profileAvatar.innerHTML = `
-                <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="46" fill="#201224" stroke="#ec4899" stroke-width="2"/>
-                    <!-- Admin specific graphics -->
-                    <rect x="42" y="28" width="16" height="16" fill="none" stroke="#ec4899" stroke-width="2" transform="rotate(45 50 36)"/>
-                    <circle cx="50" cy="36" r="4" fill="#00f0ff"/>
-                    <path d="M25,76 C25,60 75,60 75,76" fill="none" stroke="#ec4899" stroke-width="2"/>
-                </svg>
-            `;
-        }
 
-        // Configure footer
-        if (footerLeftInfo) {
-            footerLeftInfo.innerHTML = `COURSEVERSE INTEL CENTER v8.2.1 <span class="footer-sync-time">LAST SYNC: 14:02 STARDATE:442.1</span>`;
         }
-        if (footerRightLinks) {
-            footerRightLinks.innerHTML = `
-                <a href="#">Security Logs</a>
-                <a href="#">System Logs</a>
-                <a href="#">Network Terminal</a>
-            `;
-        }
-
-        // Initialize admin specific canvases
-        initGalaxyMapCanvas();
-        initDataVelocityCanvas();
-    }
 
 
     /* ==========================================
@@ -251,24 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     stats[0].textContent = data.activeCourse.enrolled.toLocaleString();
                     stats[1].textContent = data.activeCourse.completion;
                     stats[2].textContent = data.activeCourse.velocity;
-                }
-            } else if (userRole === 'admin') {
-                const counters = document.querySelectorAll('.telemetry-counters .tel-counter strong');
-                if (counters.length >= 1) {
-                    counters[0].textContent = data.totalNodes.toLocaleString();
-                }
-
-                const tableBody = document.querySelector('.logs-table tbody');
-                if (tableBody && data.logs) {
-                    tableBody.innerHTML = data.logs.map(log => `
-                        <tr>
-                            <td><strong>${log.operation}</strong></td>
-                            <td>${log.source}</td>
-                            <td>${log.time}</td>
-                            <td><span class="status-pill status-success"><span class="dot"></span> ${log.status}</span></td>
-                            <td>${log.latency}</td>
-                        </tr>
-                    `).join('');
                 }
             }
         } catch (err) {
@@ -416,259 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         drawConstellation();
-    }
-
-
-    /* ==========================================
-       4. TELEMETRY GALAXY MAP (ADMIN VIEW)
-       ========================================== */
-    function initGalaxyMapCanvas() {
-        const canvas = document.getElementById('galaxy-map-canvas');
-        const ctx = canvas?.getContext('2d');
-        if (!canvas || !ctx) return;
-
-        let width = canvas.width = canvas.parentElement.clientWidth;
-        let height = canvas.height = canvas.parentElement.clientHeight;
-
-        window.addEventListener('resize', () => {
-            if (canvas.parentElement) {
-                width = canvas.width = canvas.parentElement.clientWidth;
-                height = canvas.height = canvas.parentElement.clientHeight;
-            }
-        });
-
-        // Generate spiral arm stars
-        const stars = [];
-        const armCount = 2;
-        const starCount = 380;
-        
-        for (let i = 0; i < starCount; i++) {
-            // Distance from center
-            const r = Math.pow(Math.random(), 2.5) * 160 + 5;
-            // Angle spread along arm spiral
-            const armAngle = (i % armCount) * (2 * Math.PI / armCount);
-            const theta = r * 0.035 + armAngle + (Math.random() - 0.5) * 0.45;
-            
-            stars.push({
-                r: r,
-                theta: theta,
-                speed: 0.002 + (1 - r/180) * 0.003,
-                size: Math.random() * 1.5 + 0.3,
-                opacity: Math.random() * 0.6 + 0.4
-            });
-        }
-
-        // Blinking system anchor points
-        const bases = [
-            { name: 'Orion Ring Base', r: 45, theta: 1.5, size: 6, color: '#8b5cf6', blink: true },
-            { name: 'Andromeda Gateway', r: 95, theta: 4.2, size: 6, color: '#06b6d4', blink: true },
-            { name: 'Alpha Core Signal', r: 135, theta: 2.8, size: 4, color: '#ec4899', blink: true }
-        ];
-
-        let hoverNode = null;
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left - width/2;
-            const mouseY = e.clientY - rect.top - height/2;
-            
-            let found = null;
-            bases.forEach(base => {
-                const bx = base.r * Math.cos(base.theta);
-                const by = base.r * Math.sin(base.theta);
-                const dist = Math.hypot(mouseX - bx, mouseY - by);
-                if (dist < 12) {
-                    found = base;
-                }
-            });
-            hoverNode = found;
-        });
-
-        function animateGalaxy() {
-            ctx.fillStyle = document.body.classList.contains('light-theme') ? '#f8fafc' : '#060812';
-            ctx.fillRect(0, 0, width, height);
-
-            const cx = width / 2;
-            const cy = height / 2;
-
-            // Draw core grid circular metrics
-            ctx.strokeStyle = document.body.classList.contains('light-theme') ? 'rgba(0, 0, 0, 0.03)' : 'rgba(255, 255, 255, 0.015)';
-            ctx.lineWidth = 1;
-            for(let radius = 50; radius <= 200; radius += 50) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-
-            // Draw galaxy core glow
-            const coreGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, 35);
-            coreGrad.addColorStop(0, document.body.classList.contains('light-theme') ? '#7c3aed' : '#ffffff');
-            coreGrad.addColorStop(0.2, '#c084fc');
-            coreGrad.addColorStop(0.5, document.body.classList.contains('light-theme') ? 'rgba(124, 58, 237, 0.15)' : 'rgba(139, 92, 246, 0.25)');
-            coreGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = coreGrad;
-            ctx.beginPath();
-            ctx.arc(cx, cy, 35, 0, Math.PI*2);
-            ctx.fill();
-
-            // Draw stars
-            stars.forEach(star => {
-                // Spin star
-                star.theta += star.speed;
-                
-                // Polar to cartesian
-                const x = star.r * Math.cos(star.theta) + cx;
-                const y = star.r * Math.sin(star.theta) + cy;
-
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? `rgba(109, 40, 217, ${star.opacity * 0.3})` : `rgba(255, 255, 255, ${star.opacity})`;
-                ctx.beginPath();
-                ctx.arc(x, y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
-
-            // Draw base nodes
-            bases.forEach(base => {
-                base.theta += 0.0015; // rotate slow
-                
-                const bx = base.r * Math.cos(base.theta) + cx;
-                const by = base.r * Math.sin(base.theta) + cy;
-
-                // Pulsing outer ring
-                const time = Date.now() * 0.004;
-                const ringScale = Math.sin(time) * 4 + 8;
-                
-                ctx.strokeStyle = base.color;
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.arc(bx, by, ringScale, 0, Math.PI * 2);
-                ctx.stroke();
-
-                // Inner core
-                ctx.fillStyle = base.color;
-                ctx.beginPath();
-                ctx.arc(bx, by, base.size / 2, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Text labels
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? '#1e293b' : '#ffffff';
-                ctx.font = '500 10px var(--font-heading)';
-                ctx.textAlign = 'left';
-                ctx.fillText(base.name, bx + 12, by + 4);
-            });
-
-            // Draw hover tooltip HUD
-            if (hoverNode) {
-                const bx = hoverNode.r * Math.cos(hoverNode.theta) + cx;
-                const by = hoverNode.r * Math.sin(hoverNode.theta) + cy;
-
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? 'rgba(255, 255, 255, 0.95)' : 'rgba(13, 19, 41, 0.95)';
-                ctx.strokeStyle = varColorHex(hoverNode.color);
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.roundRect(bx + 15, by - 40, 150, 50, 6);
-                ctx.fill();
-                ctx.stroke();
-
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? '#0f172a' : '#ffffff';
-                ctx.font = 'bold 10px monospace';
-                ctx.fillText(`SYSTEM: ${hoverNode.name.toUpperCase()}`, bx + 22, by - 26);
-                
-                ctx.fillStyle = document.body.classList.contains('light-theme') ? 'rgba(109, 40, 217, 0.9)' : 'rgba(6, 240, 255, 0.8)';
-                ctx.fillText(`STATUS: LINK STABLE`, bx + 22, by - 12);
-            }
-
-            requestAnimationFrame(animateGalaxy);
-        }
-
-        function varColorHex(col) {
-            if(col === '#8b5cf6') return '#8b5cf6';
-            if(col === '#06b6d4') return '#06b6d4';
-            return '#ec4899';
-        }
-
-        animateGalaxy();
-    }
-
-
-    /* ==========================================
-       5. DATA VELOCITY SPLINE (ADMIN VIEW)
-       ========================================== */
-    function initDataVelocityCanvas() {
-        const canvas = document.getElementById('data-velocity-canvas');
-        const ctx = canvas?.getContext('2d');
-        if (!canvas || !ctx) return;
-
-        let width = canvas.width = canvas.parentElement.clientWidth;
-        let height = canvas.height = canvas.parentElement.clientHeight;
-
-        window.addEventListener('resize', () => {
-            if (canvas.parentElement) {
-                width = canvas.width = canvas.parentElement.clientWidth;
-                height = canvas.height = canvas.parentElement.clientHeight;
-            }
-        });
-
-        let offset = 0;
-
-        function drawWave() {
-            ctx.clearRect(0, 0, width, height);
-
-            const cy = height / 2 + 10;
-            
-            // Draw Wave 1 (Muted, background)
-            ctx.strokeStyle = 'rgba(139, 92, 246, 0.25)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            for (let x = 0; x < width; x++) {
-                const y = cy + Math.sin(x * 0.01 + offset) * 20 + Math.cos(x * 0.005 - offset) * 10;
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-
-            // Draw Wave 2 (Active, glowing)
-            const mainGrad = ctx.createLinearGradient(0, 0, width, 0);
-            mainGrad.addColorStop(0, '#8b5cf6');
-            mainGrad.addColorStop(0.5, '#ec4899');
-            mainGrad.addColorStop(1, '#06b6d4');
-
-            ctx.strokeStyle = mainGrad;
-            ctx.lineWidth = 3;
-            
-            // Setup gradient area fill path
-            const fillPath = new Path2D();
-            fillPath.moveTo(0, height);
-
-            ctx.beginPath();
-            for (let x = 0; x < width; x++) {
-                const y = cy + Math.sin(x * 0.012 - offset * 1.2) * 25 + Math.cos(x * 0.008 + offset * 0.8) * 12;
-                if (x === 0) {
-                    ctx.moveTo(x, y);
-                    fillPath.lineTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                    fillPath.lineTo(x, y);
-                }
-            }
-            ctx.stroke();
-            
-            // Finish fill path
-            fillPath.lineTo(width, height);
-            fillPath.closePath();
-
-            // Semi-transparent area fill
-            const areaGrad = ctx.createLinearGradient(0, 0, 0, height);
-            areaGrad.addColorStop(0, 'rgba(139, 92, 246, 0.15)');
-            areaGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = areaGrad;
-            ctx.fill(fillPath);
-
-            // Animate offset
-            offset += 0.035;
-
-            requestAnimationFrame(drawWave);
-        }
-
-        drawWave();
     }
 
 
@@ -876,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── SIDEBAR NAVIGATION (full wiring) ────────────────────────────────────
-    const allDashPanels = [studentDash, instructorDash, adminDash,
+    const allDashPanels = [studentDash, instructorDash,
         document.getElementById('star-maps-panel'),
         document.getElementById('research-lab-panel'),
         document.getElementById('archives-panel')
@@ -891,7 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
         allDashPanels.forEach(p => p && (p.style.display = 'none'));
         if (userRole === 'student' && studentDash) studentDash.style.display = 'block';
         if (userRole === 'instructor' && instructorDash) instructorDash.style.display = 'block';
-        if (userRole === 'admin' && adminDash) adminDash.style.display = 'block';
     }
 
     const sidebarLinks = document.querySelectorAll('.sidebar-nav-link');
@@ -974,16 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('support-modal')?.classList.remove('active');
     });
 
-    // ─── FOOTER DEAD LINKS → COMING SOON ─────────────────────────────────────
-    document.getElementById('footer-right-links')?.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('coming-soon-modal')?.classList.add('active');
-        });
-    });
-    document.getElementById('close-coming-soon')?.addEventListener('click', () => {
-        document.getElementById('coming-soon-modal')?.classList.remove('active');
-    });
+
     document.getElementById('close-profile-card')?.addEventListener('click', () => {
         document.getElementById('profile-card-popover').style.display = 'none';
         document.getElementById('profile-card-popover').classList.remove('active');

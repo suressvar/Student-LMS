@@ -12,9 +12,29 @@
     <!-- FontAwesome for futuristic icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Style Sheets -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
+
+    <!-- Glowing Preloader Screen -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <!-- 3D Orbiting Quantum Preloader Canvas -->
+            <div class="preloader-canvas-wrap">
+                <canvas id="preloader-canvas" width="200" height="200"></canvas>
+            </div>
+            <div class="preloader-logo">
+                <i class="fa-solid fa-shuttle-space logo-icon"></i>
+                <span>CourseVerse</span>
+            </div>
+            <div class="preloader-bar-container">
+                <div class="preloader-bar" id="preloader-bar"></div>
+            </div>
+            <div class="preloader-status">
+                Initializing Quantum Uplink... <span id="preloader-pct">0%</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Background Dynamic Starfield Canvas -->
     <canvas id="starfield-canvas"></canvas>
@@ -23,13 +43,15 @@
     <header class="header">
         <div class="header-container">
             <a href="#" class="logo" id="logo">
+                <i class="fa-solid fa-shuttle-space logo-icon"></i>
                 <span class="logo-text">CourseVerse</span>
             </a>
             
             <nav class="nav-menu">
-                <a href="#curriculum" class="nav-link">Explore</a>
-                <a href="#pricing" class="nav-link">Pricing</a>
-                <a href="#community" class="nav-link">Modules</a>
+                <a href="#curriculum" class="nav-link">Curriculum</a>
+                <a href="#aura-ai" class="nav-link">Aura AI</a>
+                <a href="#community" class="nav-link">Community</a>
+                <a href="#pricing" class="nav-link">Plans</a>
             </nav>
             
             <div class="header-actions">
@@ -66,11 +88,11 @@
                     Embark on a celestial journey of education. From the basics of earthbound AI to the quantum mechanics of distant stars, we prepare you for the next frontier.
                 </p>
                 <div class="hero-ctas reveal">
-                    <button class="btn btn-primary enlist-btn-trigger">
-                        Enlist Now <span class="arrow-icon">🚀</span>
+                    <button class="btn btn-primary enlist-btn-trigger" id="get-started-btn">
+                        Get Started Free <span class="hero-btn-arrow">↗</span>
                     </button>
-                    <button class="btn btn-secondary map-btn-trigger">
-                        <i class="fa-solid fa-map-location-dot"></i> View Star Map
+                    <button class="btn btn-secondary map-btn-trigger" id="watch-demo-btn">
+                        <span class="play-icon-wrap"><i class="fa-solid fa-play"></i></span> Watch Demo
                     </button>
                 </div>
             </div>
@@ -216,6 +238,93 @@
         </div>
     </section>
 
+    <!-- Aura AI Financial Analytics Section -->
+    <section class="section aura-ai-section" id="aura-ai">
+        <div class="container aura-ai-grid">
+            <!-- Left Content Pane -->
+            <div class="aura-ai-info reveal">
+                <div class="aura-badge"><i class="fa-solid fa-sparkles"></i> Aura AI Copilot</div>
+                <h2 class="aura-title">AI-Augmented Financial Analytics</h2>
+                <p class="aura-desc">No more rigid spreadsheets. Aura analyzes your transactions, classifies spending automatically, and forecasts your budget with intelligent projections.</p>
+                
+                <div class="aura-features-grid">
+                    <div class="aura-feature-card">
+                        <div class="aura-feat-icon purple-gradient-icon"><i class="fa-solid fa-tags"></i></div>
+                        <div class="aura-feat-text">
+                            <h3>Auto-Categorization</h3>
+                            <p>Classifies transactions automatically into clean, responsive category charts.</p>
+                        </div>
+                    </div>
+                    <div class="aura-feature-card">
+                        <div class="aura-feat-icon cyan-gradient-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="aura-feat-text">
+                            <h3>Pre-emptive Budget Alerts</h3>
+                            <p>Get warned immediately if spending trends predict a budget overrun before the month ends.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Interactive Card Pane -->
+            <div class="aura-ai-visual reveal">
+                <div class="aura-copilot-card glass-panel">
+                    <div class="card-glow"></div>
+                    <div class="copilot-card-header">
+                        <div class="copilot-title">
+                            <span class="pulse-dot"></span>
+                            <span class="title-text">Aura AI Copilot</span>
+                        </div>
+                        <div class="copilot-status">
+                            <span class="status-label">STATUS</span>
+                            <span class="status-value active-text">ACTIVE</span>
+                        </div>
+                    </div>
+                    
+                    <div class="copilot-card-body">
+                        <div class="terminal-simulation">
+                            <div class="terminal-header">
+                                <span class="term-dot dot-red"></span>
+                                <span class="term-dot dot-yellow"></span>
+                                <span class="term-dot dot-green"></span>
+                                <span class="term-title">ANALYZING YOUR FINANCES</span>
+                            </div>
+                            <div class="terminal-body">
+                                <div class="terminal-text-line cursor-typing">> Analyzing your spending patterns for this month...</div>
+                                <div class="terminal-text-line success-line">⚡ AI SUMMARY</div>
+                                <div class="terminal-text-line summary-quote">
+                                    "At your current savings rate, your balance of ₹24,500 is projected to reach ₹30,370 by end of month. Consider allocating ₹1,200 more to your emergency fund."
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="copilot-stats-row">
+                            <div class="score-card">
+                                <div class="score-radial-wrap">
+                                    <svg class="score-svg" viewBox="0 0 100 100">
+                                        <defs>
+                                            <linearGradient id="score-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#06b6d4" />
+                                                <stop offset="100%" stop-color="#8b5cf6" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="score-bg-circle" cx="50" cy="50" r="40"></circle>
+                                        <circle class="score-fg-circle" cx="50" cy="50" r="40" style="stroke-dasharray: 251.2; stroke-dashoffset: 251.2; transition: stroke-dashoffset 2s ease;"></circle>
+                                    </svg>
+                                    <span class="score-percentage">0%</span>
+                                </div>
+                                <div class="score-text-wrap">
+                                    <div class="score-title">FINANCIAL HEALTH SCORE</div>
+                                    <div class="score-status text-glow-cyan">Excellent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Stats Counter Section -->
     <section class="section stats-section">
         <div class="container stats-grid">
@@ -271,12 +380,122 @@
         </div>
     </section>
 
+
+    <!-- ══════════════════════════════════════════
+         PRICING SECTION
+         ══════════════════════════════════════════ -->
+    <section class="section pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="pricing-eyebrow">PRICING</div>
+                <h2 class="section-title pricing-title">Simple, <span class="text-glow">Transparent</span> Plans</h2>
+                <p class="section-subtitle pricing-subtitle">
+                    Choose your command tier. All plans include access to the Orion AI core and galactic curriculum archives.
+                </p>
+                <!-- Billing Toggle -->
+                <div class="billing-toggle-wrapper">
+                    <span class="billing-label" id="monthly-label">Monthly</span>
+                    <div class="billing-toggle" id="billing-toggle" role="switch" aria-checked="false">
+                        <div class="billing-toggle-knob"></div>
+                    </div>
+                    <span class="billing-label" id="annual-label">Annual <span class="billing-save-badge">Save 20%</span></span>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+
+                <!-- ── CADET (Free) ── -->
+                <div class="pricing-card reveal" id="pricing-cadet">
+                    <div class="pricing-card-glow glow-purple"></div>
+                    <div class="pricing-tier-badge">CADET</div>
+                    <div class="pricing-price-block">
+                        <div class="pricing-currency">$</div>
+                        <div class="pricing-amount" data-monthly="0" data-annual="0">0</div>
+                        <div class="pricing-period">/month</div>
+                    </div>
+                    <p class="pricing-desc">Begin your journey across the galactic curriculum — no credits required.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fa-solid fa-circle-check feat-check"></i> 5 Core Modules</li>
+                        <li><i class="fa-solid fa-circle-check feat-check"></i> Orion AI Study Guide</li>
+                        <li><i class="fa-solid fa-circle-check feat-check"></i> Community Squad Access</li>
+                        <li><i class="fa-solid fa-circle-xmark feat-cross"></i> Live Mentorship Sessions</li>
+                        <li><i class="fa-solid fa-circle-xmark feat-cross"></i> Certification Credentials</li>
+                        <li><i class="fa-solid fa-circle-xmark feat-cross"></i> Priority Transmission Support</li>
+                    </ul>
+                    <button class="btn pricing-cta pricing-cta-outline enlist-btn-trigger" id="cadet-plan-btn">
+                        Launch For Free <i class="fa-solid fa-rocket"></i>
+                    </button>
+                </div>
+
+                <!-- ── COMMANDER (Pro) — POPULAR ── -->
+                <div class="pricing-card pricing-card-featured reveal" id="pricing-commander">
+                    <div class="pricing-card-glow glow-cyan"></div>
+                    <div class="pricing-popular-badge"><i class="fa-solid fa-star"></i> MOST POPULAR</div>
+                    <div class="pricing-tier-badge tier-cyan">COMMANDER</div>
+                    <div class="pricing-price-block">
+                        <div class="pricing-currency">$</div>
+                        <div class="pricing-amount" data-monthly="29" data-annual="23">29</div>
+                        <div class="pricing-period">/month</div>
+                    </div>
+                    <p class="pricing-desc">Unlock the full star map and fast-track your ascent through the ranks.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-cyan"></i> Unlimited Modules</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-cyan"></i> Advanced Orion AI Pathways</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-cyan"></i> Community Squad Access</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-cyan"></i> 10 Live Mentorship Sessions/mo</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-cyan"></i> Verified Certifications</li>
+                        <li><i class="fa-solid fa-circle-xmark feat-cross"></i> Priority Transmission Support</li>
+                    </ul>
+                    <button class="btn pricing-cta pricing-cta-primary enlist-btn-trigger" id="commander-plan-btn">
+                        Engage Commander Mode <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+
+                <!-- ── ADMIRAL (Business) ── -->
+                <div class="pricing-card reveal" id="pricing-admiral">
+                    <div class="pricing-card-glow glow-pink"></div>
+                    <div class="pricing-tier-badge tier-pink">ADMIRAL</div>
+                    <div class="pricing-price-block">
+                        <div class="pricing-currency">$</div>
+                        <div class="pricing-amount" data-monthly="79" data-annual="63">79</div>
+                        <div class="pricing-period">/month</div>
+                    </div>
+                    <p class="pricing-desc">Command an entire fleet — advanced analytics and org-wide deployment.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> Everything in Commander</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> Team Fleet Management (50 seats)</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> Custom Learning Pathways</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> Unlimited Live Mentorship</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> White-Label Certifications</li>
+                        <li><i class="fa-solid fa-circle-check feat-check feat-check-pink"></i> 24/7 Priority Transmission Support</li>
+                    </ul>
+                    <button class="btn pricing-cta pricing-cta-outline pricing-cta-pink enlist-btn-trigger" id="admiral-plan-btn">
+                        Deploy Fleet <i class="fa-solid fa-satellite-dish"></i>
+                    </button>
+                </div>
+
+            </div><!-- /.pricing-grid -->
+
+            <!-- Trust bar -->
+            <div class="pricing-trust-bar reveal">
+                <span><i class="fa-solid fa-shield-halved"></i> Cancel anytime</span>
+                <span><i class="fa-solid fa-lock"></i> Encrypted payments</span>
+                <span><i class="fa-solid fa-rotate-left"></i> 30-day stellar refund</span>
+                <span><i class="fa-solid fa-headset"></i> Galactic support</span>
+            </div>
+
+        </div>
+    </section>
+
     <!-- Footer Section -->
     <footer class="footer">
         <div class="container footer-grid">
             <!-- Logo & Brand info -->
             <div class="footer-brand">
-                <a href="#" class="footer-logo">CourseVerse</a>
+                <a href="#" class="footer-logo">
+                    <i class="fa-solid fa-shuttle-space logo-icon"></i>
+                    <span>CourseVerse</span>
+                </a>
                 <p class="footer-desc">Defining the next century of education through technology and science.</p>
                 <div class="social-links">
                     <a href="#" aria-label="Globe Website"><i class="fa-solid fa-globe"></i></a>
@@ -285,24 +504,7 @@
                 </div>
             </div>
 
-            <!-- Navigation Lists -->
-            <div class="footer-links-col">
-                <h4 class="footer-heading">LEARNING</h4>
-                <ul class="footer-links-list">
-                    <li><a href="#">Modules</a></li>
-                    <li><a href="#">Pathways</a></li>
-                    <li><a href="#">Degrees</a></li>
-                </ul>
-            </div>
 
-            <div class="footer-links-col">
-                <h4 class="footer-heading">COMPANY</h4>
-                <ul class="footer-links-list">
-                    <li><a href="#">Mission</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                </ul>
-            </div>
 
             <!-- Newsletter Transmission Box -->
             <div class="footer-newsletter">
@@ -320,11 +522,6 @@
 
         <div class="container footer-bottom">
             <p>&copy; 2026 CourseVerse Galactic Inc. All rights reserved.</p>
-            <div class="footer-bottom-links">
-                <a href="#">Privacy Protocol</a>
-                <a href="#">Honor Guidelines</a>
-                <a href="#">Interstellar Terms</a>
-            </div>
         </div>
     </footer>
 
@@ -373,19 +570,47 @@
                 </button>
             </div>
             
-            <div class="terminal-body" id="terminal-screen">
-                <div class="terminal-output" id="terminal-output"></div>
-                <div class="terminal-input-line">
-                    <span class="prompt-symbol">&gt;</span>
-                    <input type="text" class="terminal-input" id="terminal-input" autocomplete="off" autofocus>
+            <!-- Beautiful registration form card instead of terminal -->
+            <div class="enlist-form-card" id="enlist-form-card">
+                <div class="enlist-header">
+                    <h2>Galactic Cadet Registry</h2>
+                    <p>Enter your credentials to commission your star voyager badge and unlock the curriculum archive.</p>
                 </div>
+                <div class="enlist-form-group">
+                    <label for="cadet-name-input">CADET CALLSIGN / NAME</label>
+                    <input type="text" id="cadet-name-input" placeholder="e.g. COMMANDER ALEX" autocomplete="off">
+                </div>
+                <div class="enlist-form-group">
+                    <label>CURRICULUM DIVISION PATHWAY</label>
+                    <div class="track-options">
+                        <label class="track-option">
+                            <input type="radio" name="cadet-track-select" value="1" checked>
+                            <span class="track-custom-radio"></span>
+                            <span class="track-text">Artificial Intelligence Systems</span>
+                        </label>
+                        <label class="track-option">
+                            <input type="radio" name="cadet-track-select" value="2">
+                            <span class="track-custom-radio"></span>
+                            <span class="track-text">Quantum Computation & FTL Networks</span>
+                        </label>
+                        <label class="track-option">
+                            <input type="radio" name="cadet-track-select" value="3">
+                            <span class="track-custom-radio"></span>
+                            <span class="track-text">Astro-Architectural Interface Design</span>
+                        </label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="enlist-submit-btn">Commission Smart Badge</button>
             </div>
 
             <!-- Final Cadet Badge Showcase (hidden initially) -->
             <div class="cadet-badge-card" id="cadet-badge-card">
                 <div class="badge-glow-overlay"></div>
                 <div class="badge-header">
-                    <div class="badge-logo">CourseVerse</div>
+                    <div class="badge-logo">
+                        <i class="fa-solid fa-shuttle-space logo-icon" style="font-size: 1.15rem; vertical-align: middle;"></i>
+                        <span style="vertical-align: middle;">CourseVerse</span>
+                    </div>
                     <span class="badge-status">CADET ACTIVATED</span>
                 </div>
                 
@@ -424,27 +649,13 @@
         </div>
     </div>
 
-    <!-- =============================================
-         COMING SOON MODAL
-         ============================================= -->
-    <div class="lms-modal" id="coming-soon-modal">
-        <div class="lms-modal-content" style="max-width:420px; text-align:center;">
-            <div class="lms-modal-header" style="border-bottom:none; justify-content:flex-end;">
-                <button class="lms-modal-close" id="close-coming-soon">&#x2715;</button>
-            </div>
-            <div class="lms-modal-body" style="padding:20px 40px 40px; display:flex; flex-direction:column; align-items:center; gap:16px;">
-                <div style="font-size:3rem; color:var(--clr-purple); filter:drop-shadow(0 0 12px var(--clr-purple-glow));"><i class="fa-solid fa-rocket"></i></div>
-                <h2 style="font-family:var(--font-heading); font-size:1.6rem;">Incoming Transmission</h2>
-                <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6;">This sector is currently under orbital construction. Our engineering team is calibrating the warp drives — it'll be online soon!</p>
-                <button class="btn btn-primary" onclick="document.getElementById('coming-soon-modal').classList.remove('active');" style="margin-top:8px; width:100%;">Acknowledged</button>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Glass Toast -->
     <div class="glass-toast" id="glass-toast"></div>
 
     <!-- Scripts -->
-    <script src="app.js"></script>
+    <script src="bg3d.js?v=2"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>

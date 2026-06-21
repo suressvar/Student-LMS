@@ -33,7 +33,7 @@ router.get('/:id', authenticateToken, async (req, res) => {
         }
 
         let query = 'SELECT id, quiz_id, question_text, option_a, option_b, option_c, option_d';
-        if (req.user.role === 'instructor' || req.user.role === 'admin') {
+        if (req.user.role === 'instructor') {
             query += ', correct_option';
         }
         query += ' FROM quiz_questions WHERE quiz_id = $1 ORDER BY id ASC';

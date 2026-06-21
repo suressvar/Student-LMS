@@ -223,8 +223,8 @@ router.post('/:id/modules', authenticateToken, authorizeRoles('instructor'), asy
     }
 });
 
-// 7. Edit Course Details (Instructor or Admin)
-router.put('/:id', authenticateToken, authorizeRoles('instructor', 'admin'), async (req, res) => {
+// 7. Edit Course Details (Instructor Only)
+router.put('/:id', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
     const courseId = req.params.id;
     const { title, category, description, learning_outcomes, is_published } = req.body;
     try {
@@ -259,8 +259,8 @@ router.put('/:id', authenticateToken, authorizeRoles('instructor', 'admin'), asy
     }
 });
 
-// 8. Delete Course (Instructor or Admin)
-router.delete('/:id', authenticateToken, authorizeRoles('instructor', 'admin'), async (req, res) => {
+// 8. Delete Course (Instructor Only)
+router.delete('/:id', authenticateToken, authorizeRoles('instructor'), async (req, res) => {
     const courseId = req.params.id;
     try {
         const courseRes = await pool.query('SELECT * FROM courses WHERE id = $1', [courseId]);

@@ -3,14 +3,173 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================
+       QUANTUM PRELOADER SESSION (SUPER ULTRA 3D)
+       ========================================== */
+    const preloader = document.getElementById('preloader');
+    const preloaderBar = document.getElementById('preloader-bar');
+    const preloaderPct = document.getElementById('preloader-pct');
+    const pCanvas = document.getElementById('preloader-canvas');
+
+    if (preloader && preloaderBar && preloaderPct && pCanvas) {
+        const pCtx = pCanvas.getContext('2d');
+        const pW = pCanvas.width = 200;
+        const pH = pCanvas.height = 200;
+        const pCx = pW / 2;
+        const pCy = pH / 2;
+
+        // Generate 3D sphere particles
+        const pCount = 80;
+        const pPoints = [];
+        for (let i = 0; i < pCount; i++) {
+            const theta = Math.acos(Math.random() * 2 - 1);
+            const phi = Math.random() * Math.PI * 2;
+            pPoints.push({
+                x: Math.sin(theta) * Math.cos(phi),
+                y: Math.sin(theta) * Math.sin(phi),
+                z: Math.cos(theta),
+                ox: Math.sin(theta) * Math.cos(phi), // original coords
+                oy: Math.sin(theta) * Math.sin(phi),
+                oz: Math.cos(theta)
+            });
+        }
+
+        let progress = 0;
+        let rotX = 0, rotY = 0, rotZ = 0;
+        let expl = false;
+        let explProgress = 0;
+        let isPloaderLight = document.body.classList.contains('light-theme');
+
+        // Render loop for 3D preloader
+        function drawPreloader3D() {
+            if (progress >= 100 && explProgress >= 1) {
+                return;
+            }
+
+            pCtx.clearRect(0, 0, pW, pH);
+
+            // Speeds up as progress increases
+            const speedFactor = 1 + (progress / 100) * 4.5;
+            rotX += 0.012 * speedFactor;
+            rotY += 0.018 * speedFactor;
+            rotZ += 0.008 * speedFactor;
+
+            // Sphere contracts as progress increases, then explodes
+            let radius = 65 * (1 - (progress / 100) * 0.35);
+            if (expl) {
+                explProgress += 0.04;
+                radius = 65 * 0.65 + (explProgress * 300); // rapidly expand
+            }
+
+            // Project 3D points
+            const projected = pPoints.map(p => {
+                // Rotate X
+                const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+                let y1 = p.oy * cosX - p.oz * sinX;
+                let z1 = p.oz * cosX + p.oy * sinX;
+
+                // Rotate Y
+                const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+                let x2 = p.ox * cosY - z1 * sinY;
+                let z2 = z1 * cosY + p.ox * sinY;
+
+                // Rotate Z
+                const cosZ = Math.cos(rotZ), sinZ = Math.sin(rotZ);
+                let x3 = x2 * cosZ - y1 * sinZ;
+                let y3 = y1 * cosZ + x2 * sinZ;
+
+                // Perspective projection
+                const fov = 200;
+                const scale = fov / (fov + (z2 * radius));
+                const sx = pCx + x3 * radius * scale;
+                const sy = pCy + y3 * radius * scale;
+
+                return { sx, sy, scale, z: z2 };
+            });
+
+            // Draw connecting web lines (constellation)
+            const colorHue = 265;
+            let lineAlpha = expl ? (1 - explProgress) * 0.15 : 0.22;
+            pCtx.strokeStyle = isPloaderLight ? `hsla(${colorHue}, 80%, 45%, ${lineAlpha})` : `hsla(${colorHue}, 80%, 75%, ${lineAlpha})`;
+            pCtx.lineWidth = 0.8;
+            for (let i = 0; i < projected.length; i++) {
+                for (let j = i + 1; j < projected.length; j++) {
+                    const dx = projected[i].sx - projected[j].sx;
+                    const dy = projected[i].sy - projected[j].sy;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 40) {
+                        pCtx.beginPath();
+                        pCtx.moveTo(projected[i].sx, projected[i].sy);
+                        pCtx.lineTo(projected[j].sx, projected[j].sy);
+                        pCtx.stroke();
+                    }
+                }
+            }
+
+            // Draw glowing points
+            projected.forEach(p => {
+                const dotSize = Math.max(0.8, (p.z + 1.2) * 2.2);
+                let dotAlpha = expl ? (1 - explProgress) * 0.9 : 0.85;
+                const grad = pCtx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, dotSize * 3);
+                const color = isPloaderLight ? `hsla(${colorHue}, 90%, 50%, ${dotAlpha})` : `hsla(${colorHue}, 90%, 80%, ${dotAlpha})`;
+                grad.addColorStop(0, color);
+                grad.addColorStop(1, 'transparent');
+
+                pCtx.beginPath();
+                pCtx.arc(p.sx, p.sy, dotSize * 3, 0, Math.PI * 2);
+                pCtx.fillStyle = grad;
+                pCtx.fill();
+
+                pCtx.beginPath();
+                pCtx.arc(p.sx, p.sy, dotSize, 0, Math.PI * 2);
+                pCtx.fillStyle = isPloaderLight ? `hsla(${colorHue}, 95%, 45%, ${dotAlpha})` : `#ffffff`;
+                pCtx.fill();
+            });
+
+            requestAnimationFrame(drawPreloader3D);
+        }
+
+        // Animate progress values
+        const duration = 1600; // 1.6s
+        const intervalTime = 16;
+        const step = 100 / (duration / intervalTime);
+
+        const progressInterval = setInterval(() => {
+            progress += step;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(progressInterval);
+                preloaderBar.style.width = '100%';
+                preloaderPct.textContent = '100%';
+
+                // Trigger 3D explosion
+                expl = true;
+
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                }, 400);
+            } else {
+                preloaderBar.style.width = `${Math.floor(progress)}%`;
+                preloaderPct.textContent = `${Math.floor(progress)}%`;
+            }
+        }, intervalTime);
+
+        // Start 3D rendering
+        drawPreloader3D();
+    }
+
+    /* ==========================================
        THEME TOGGLE INITIALIZATION
        ========================================== */
-    const currentTheme = localStorage.getItem('courseverse_theme') || 'dark';
+    const currentTheme = localStorage.getItem('courseverse_theme') || 'light';
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
     if (currentTheme === 'light') {
         document.body.classList.add('light-theme');
         updateThemeIcon(themeToggleBtn, 'light');
+    } else {
+        document.body.classList.remove('light-theme');
+        updateThemeIcon(themeToggleBtn, 'dark');
     }
 
     themeToggleBtn?.addEventListener('click', () => {
@@ -37,77 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================
-       1. STARFIELD BACKGROUND CANVAS
+       1. 3D BACKGROUND — Handled by bg3d.js
        ========================================== */
-    const bgCanvas = document.getElementById('starfield-canvas');
-    const bgCtx = bgCanvas?.getContext('2d');
-    let stars = [];
-    const starCount = 100;
-    let mouseX = 0;
-    let mouseY = 0;
-
-    if (bgCanvas && bgCtx) {
-        resizeBgCanvas();
-        initStars();
-        animateStars();
-
-        window.addEventListener('resize', resizeBgCanvas);
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
-        });
-    }
-
-    function resizeBgCanvas() {
-        bgCanvas.width = window.innerWidth;
-        bgCanvas.height = window.innerHeight;
-    }
-
-    function initStars() {
-        stars = [];
-        for (let i = 0; i < starCount; i++) {
-            stars.push({
-                x: Math.random() * bgCanvas.width,
-                y: Math.random() * bgCanvas.height,
-                size: Math.random() * 1.8 + 0.2,
-                speedX: (Math.random() - 0.5) * 0.2,
-                speedY: (Math.random() - 0.5) * 0.2,
-                opacity: Math.random() * 0.8 + 0.2
-            });
-        }
-    }
-
-    function animateStars() {
-        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-        
-        stars.forEach(star => {
-            // Move stars slowly
-            star.x += star.speedX;
-            star.y += star.speedY;
-
-            // Apply light mouse parallax drift
-            const driftX = mouseX * 0.1 * (star.size * 0.5);
-            const driftY = mouseY * 0.1 * (star.size * 0.5);
-
-            // Wrap around edges
-            if (star.x < 0) star.x = bgCanvas.width;
-            if (star.x > bgCanvas.width) star.x = 0;
-            if (star.y < 0) star.y = bgCanvas.height;
-            if (star.y > bgCanvas.height) star.y = 0;
-
-            // Draw star
-            if (document.body.classList.contains('light-theme')) {
-                bgCtx.fillStyle = `rgba(139, 92, 246, ${star.opacity * 0.45})`;
-            } else {
-                bgCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-            }
-            bgCtx.beginPath();
-            bgCtx.arc(star.x + driftX, star.y + driftY, star.size, 0, Math.PI * 2);
-            bgCtx.fill();
-        });
-
-        requestAnimationFrame(animateStars);
-    }
+    // bg3d.js is loaded as a standalone script and auto-initialises
+    // the deep-space 3D starfield, nebula, aurora, and rings on all pages.
 
 
     /* ==========================================
@@ -128,6 +220,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
+
+
+    /* ==========================================
+       PRICING BILLING TOGGLE
+       ========================================== */
+    (function initPricingToggle() {
+        const toggle = document.getElementById('billing-toggle');
+        const monthlyLabel = document.getElementById('monthly-label');
+        const annualLabel  = document.getElementById('annual-label');
+        if (!toggle) return;
+
+        let isAnnual = false;
+
+        function updatePrices() {
+            document.querySelectorAll('.pricing-amount').forEach(el => {
+                const newVal = isAnnual
+                    ? el.getAttribute('data-annual')
+                    : el.getAttribute('data-monthly');
+
+                // Flip animation
+                el.classList.add('flip');
+                setTimeout(() => {
+                    el.textContent = newVal;
+                    el.classList.remove('flip');
+                }, 180);
+            });
+
+            toggle.classList.toggle('on', isAnnual);
+            toggle.setAttribute('aria-checked', String(isAnnual));
+            monthlyLabel?.classList.toggle('active', !isAnnual);
+            annualLabel?.classList.toggle('active', isAnnual);
+        }
+
+        // Initialise state
+        monthlyLabel?.classList.add('active');
+
+        toggle.addEventListener('click', () => {
+            isAnnual = !isAnnual;
+            updatePrices();
+        });
+
+        // Also let labels act as toggle targets
+        monthlyLabel?.addEventListener('click', () => { if (isAnnual)  { isAnnual = false; updatePrices(); } });
+        annualLabel?.addEventListener('click',  () => { if (!isAnnual) { isAnnual = true;  updatePrices(); } });
+    })();
 
 
     /* ==========================================
@@ -231,11 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function openTerminal() {
-        if (!terminalModal) return;
-        terminalModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        resetTerminal();
-        startTerminalSequence();
+        window.location.href = 'login.html';
     }
 
     function closeTerminal() {
@@ -545,140 +678,49 @@ document.addEventListener('DOMContentLoaded', () => {
         closeStarMap();
         setTimeout(openTerminal, 300);
     });
-
-
     /* ==========================================
-       6. SIMULATED CADET ENLISTMENT TERMINAL
+       6. SIMULATED CADET ENLISTMENT REGISTRY FORM
        ========================================== */
-    const termScreen = document.getElementById('terminal-screen');
-    const termOutput = document.getElementById('terminal-output');
-    const termInput = document.getElementById('terminal-input');
+    const enlistFormCard = document.getElementById('enlist-form-card');
+    const cadetNameInput = document.getElementById('cadet-name-input');
+    const enlistSubmitBtn = document.getElementById('enlist-submit-btn');
     const badgeCard = document.getElementById('cadet-badge-card');
-    
-    let terminalStep = 0;
-    let cadetName = "";
-    let cadetTrack = "";
-
-    const terminalPrompts = [
-        "SYSTEM STATUS: GLOBAL ORBITAL BEACONS SECURED [100%]\n" +
-        "CONNECTING TO ORION SYSTEM CORE...\n" +
-        "ESTABLISHING HIGH-BANDWIDTH DATA FREQUENCY...\n" +
-        "-----------------------------------------------\n" +
-        "Welcome to the CourseVerse Galactic Registry.\n" +
-        "Orion AI is online. Accessing database parameters...\n\n" +
-        "Authentication Protocol: SECURE DIRECT TRANSFER\n" +
-        "Please enter your desired CADET CALLSIGN:\n",
-        
-        "\nCONFIRMED. Custom callsign locked.\n" +
-        "Scanning satellite coordinates... Success.\n" +
-        "Select your specialized CURRICULUM DIVISION:\n" +
-        "  [1] Artificial Intelligence Systems\n" +
-        "  [2] Quantum Computation & FTL Networks\n" +
-        "  [3] Astro-Architectural Interface Design\n\n" +
-        "Enter division number (1, 2, or 3):\n",
-
-        "\nSyncing curriculum credentials...\n" +
-        "Compiling digital credentials for cryptographic badge...\n" +
-        "Deploying smart badge asset files...\n" +
-        "REGISTRATION INSTRUCTIONS FINALIZED.\n" +
-        "LOCKED AND ENGAGED. PRESS ENTER TO FINALIZE TRANSCEIVER FREQUENCY.\n"
-    ];
 
     function resetTerminal() {
-        terminalStep = 0;
-        cadetName = "";
-        cadetTrack = "";
-        if (termOutput) termOutput.innerHTML = "";
-        if (termInput) {
-            termInput.value = "";
-            termInput.disabled = false;
-        }
+        if (cadetNameInput) cadetNameInput.value = "";
+        const firstRadio = document.querySelector('input[name="cadet-track-select"][value="1"]');
+        if (firstRadio) firstRadio.checked = true;
         if (badgeCard) badgeCard.style.display = 'none';
-        if (termScreen) termScreen.style.display = 'flex';
+        if (enlistFormCard) enlistFormCard.style.display = 'flex';
     }
 
-    function startTerminalSequence() {
-        typeOutput(terminalPrompts[0], 0, () => {
-            termInput.focus();
-        });
-    }
-
-    function typeOutput(text, index, callback) {
-        if (!termOutput) return;
-
-        let charIdx = 0;
-        const interval = setInterval(() => {
-            if (charIdx < text.length) {
-                termOutput.innerHTML += text[charIdx];
-                charIdx++;
-                termScreen.scrollTop = termScreen.scrollHeight;
-            } else {
-                clearInterval(interval);
-                if (callback) callback();
-            }
-        }, 12);
-    }
-
-    termInput?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const inputVal = termInput.value.trim();
-            termInput.value = "";
-
-            if (!inputVal) return;
-
-            // Echo input in terminal
-            termOutput.innerHTML += `<span style="color: #fff;">${inputVal}</span>\n`;
-
-            if (terminalStep === 0) {
-                // Name confirmation step
-                cadetName = inputVal;
-                terminalStep = 1;
-                termInput.disabled = true;
-
-                setTimeout(() => {
-                    typeOutput(terminalPrompts[1], 0, () => {
-                        termInput.disabled = false;
-                        termInput.focus();
-                    });
-                }, 400);
-            } else if (terminalStep === 1) {
-                // Track selection step
-                if (inputVal === '1') {
-                    cadetTrack = "ARTIFICIAL INTELLIGENCE DIVISION";
-                } else if (inputVal === '2') {
-                    cadetTrack = "QUANTUM ARCHITECTURE DIVISION";
-                } else if (inputVal === '3') {
-                    cadetTrack = "ASTRO-DESIGN & HUMAN HUD DIVISION";
-                } else {
-                    termOutput.innerHTML += "INVALID PATH SPECIFIED. Enter 1, 2, or 3:\n";
-                    return;
-                }
-
-                terminalStep = 2;
-                termInput.disabled = true;
-
-                setTimeout(() => {
-                    typeOutput(terminalPrompts[2], 0, () => {
-                        termInput.disabled = false;
-                        termInput.focus();
-                    });
-                }, 400);
-            } else if (terminalStep === 2) {
-                // Final Badge display
-                termInput.disabled = true;
-                showCadetBadge();
+    enlistSubmitBtn?.addEventListener('click', () => {
+        let cadetName = cadetNameInput?.value.trim() || "COMMANDER ALEX";
+        
+        let cadetTrack = "ARTIFICIAL INTELLIGENCE DIVISION";
+        const selectedRadio = document.querySelector('input[name="cadet-track-select"]:checked');
+        if (selectedRadio) {
+            const val = selectedRadio.value;
+            if (val === '1') {
+                cadetTrack = "ARTIFICIAL INTELLIGENCE DIVISION";
+            } else if (val === '2') {
+                cadetTrack = "QUANTUM ARCHITECTURE DIVISION";
+            } else if (val === '3') {
+                cadetTrack = "ASTRO-DESIGN & HUMAN HUD DIVISION";
             }
         }
+
+        showCadetBadge(cadetName, cadetTrack);
     });
 
-    function showCadetBadge() {
-        if (!termScreen || !badgeCard) return;
+    function showCadetBadge(name, track) {
+        if (!enlistFormCard || !badgeCard) return;
 
-        termScreen.style.display = 'none';
+        enlistFormCard.style.display = 'none';
         
         // Set Badge parameters
-        document.getElementById('badge-name').textContent = cadetName.toUpperCase();
-        document.getElementById('badge-track').textContent = cadetTrack;
+        document.getElementById('badge-name').textContent = name.toUpperCase();
+        document.getElementById('badge-track').textContent = track;
         
         // Format timestamp
         const now = new Date();
@@ -809,30 +851,230 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Login required to search the galaxy.', 'info');
             }
         });
-
-        // Coming Soon Modal toggle
-        function showComingSoon(e) {
+        // Coming Soon Modal replacement (Toast alerts)
+        function showComingSoonToast(e) {
             e.preventDefault();
-            document.getElementById('coming-soon-modal')?.classList.add('active');
+            showToast('Coming soon to the CourseVerse constellation!', 'info');
         }
-
-        document.getElementById('close-coming-soon')?.addEventListener('click', () => {
-            document.getElementById('coming-soon-modal')?.classList.remove('active');
-        });
-
-        // Pricing Nav Link
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            if (link.getAttribute('href') === '#pricing') {
-                link.addEventListener('click', showComingSoon);
-            }
-        });
 
         // Footer links and Social Links
         const footerLinks = document.querySelectorAll('.footer-links-list a, .footer-bottom-links a, .social-links a');
         footerLinks.forEach(link => {
-            link.addEventListener('click', showComingSoon);
+            link.addEventListener('click', showComingSoonToast);
         });
+    }
+
+    /* ==========================================
+       10. CUSTOM COSMIC CURSOR INITIALIZATION
+       ========================================== */
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouchDevice) {
+        const dot = document.createElement('div');
+        const outline = document.createElement('div');
+        dot.className = 'custom-cursor-dot';
+        outline.className = 'custom-cursor-outline';
+        document.body.appendChild(dot);
+        document.body.appendChild(outline);
+        document.body.classList.add('custom-cursor-active');
+
+        let mouseX = -100;
+        let mouseY = -100;
+        let outlineX = -100;
+        let outlineY = -100;
+        let isHovering = false;
+        let isClicked = false;
+        let hasMoved = false;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            if (!hasMoved) {
+                hasMoved = true;
+                dot.style.opacity = '1';
+                outline.style.opacity = '1';
+            }
+        });
+
+        // Smooth outline physics animation
+        function updateCursorPhysics() {
+            const ease = 0.15;
+            outlineX += (mouseX - outlineX) * ease;
+            outlineY += (mouseY - outlineY) * ease;
+
+            // Apply translate3d for max render performance (GPU accelerated)
+            dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+
+            let scale = 1.0;
+            if (isClicked) {
+                scale = 0.55;
+            } else if (isHovering) {
+                scale = 1.55;
+            }
+            outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) scale(${scale})`;
+
+            requestAnimationFrame(updateCursorPhysics);
+        }
+        requestAnimationFrame(updateCursorPhysics);
+
+        // Click state interactions
+        window.addEventListener('mousedown', () => {
+            isClicked = true;
+        });
+        window.addEventListener('mouseup', () => {
+            isClicked = false;
+        });
+
+        // Hover delegation over interactive anchors
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (!target) return;
+            const isClickable = target.closest('a, button, input, select, textarea, .role-tab, [role="button"], .interactive-node, .switch-form-btn, .action-btn, .nav-link, .social-links a');
+            if (isClickable) {
+                isHovering = true;
+                dot.classList.add('hover');
+                outline.classList.add('hover');
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            if (!target) return;
+            const isClickable = target.closest('a, button, input, select, textarea, .role-tab, [role="button"], .interactive-node, .switch-form-btn, .action-btn, .nav-link, .social-links a');
+            if (isClickable) {
+                isHovering = false;
+                dot.classList.remove('hover');
+                outline.classList.remove('hover');
+            }
+        });
+
+        // Window boundary handling
+        document.addEventListener('mouseleave', () => {
+            dot.style.opacity = '0';
+            outline.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            if (hasMoved) {
+                dot.style.opacity = '1';
+                outline.style.opacity = '1';
+            }
+        });
+    }
+
+    /* ==========================================
+       AURA AI COPILOT INTERACTION & ANIMATION
+       ========================================== */
+    const auraSection = document.getElementById('aura-ai');
+    if (auraSection) {
+        const textLine = auraSection.querySelector('.cursor-typing');
+        const successLine = auraSection.querySelector('.success-line');
+        const summaryQuote = auraSection.querySelector('.summary-quote');
+        const scorePercentage = auraSection.querySelector('.score-percentage');
+        const fgCircle = auraSection.querySelector('.score-fg-circle');
+        const scoreStatus = auraSection.querySelector('.score-status');
+
+        // Initial hidden states
+        if (successLine) {
+            successLine.style.opacity = '0';
+            successLine.style.transform = 'translateY(10px)';
+        }
+        if (summaryQuote) {
+            summaryQuote.style.opacity = '0';
+            summaryQuote.style.transform = 'translateY(10px)';
+        }
+        if (scorePercentage) scorePercentage.textContent = '0%';
+        if (scoreStatus) scoreStatus.style.opacity = '0';
+
+        const auraObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startAuraAnimation();
+                    auraObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        auraObserver.observe(auraSection);
+
+        function startAuraAnimation() {
+            // 1. Text typing animation
+            const fullText = "> Analyzing your spending patterns for this month...";
+            if (textLine) {
+                textLine.textContent = "";
+                textLine.style.width = "0";
+                let i = 0;
+                
+                textLine.style.animation = "none"; // clear animation class style if any
+                textLine.offsetHeight; // trigger reflow
+                textLine.style.borderRight = "2px solid var(--clr-cyan)";
+                textLine.style.width = "auto";
+                
+                const typingInterval = setInterval(() => {
+                    if (i < fullText.length) {
+                        textLine.textContent += fullText.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(typingInterval);
+                        setTimeout(() => {
+                            textLine.style.borderRight = "none";
+                            showSummary();
+                        }, 500);
+                    }
+                }, 30);
+            } else {
+                showSummary();
+            }
+        }
+
+        function showSummary() {
+            if (successLine) {
+                successLine.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+                successLine.style.opacity = "1";
+                successLine.style.transform = "translateY(0)";
+            }
+            
+            setTimeout(() => {
+                if (summaryQuote) {
+                    summaryQuote.style.transition = "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)";
+                    summaryQuote.style.opacity = "1";
+                    summaryQuote.style.transform = "translateY(0)";
+                }
+                
+                animateHealthScore();
+            }, 500);
+        }
+
+        function animateHealthScore() {
+            const targetScore = 94;
+            const circumference = 251.2;
+            const offset = circumference - (targetScore / 100) * circumference;
+
+            if (fgCircle) {
+                fgCircle.style.strokeDasharray = circumference;
+                fgCircle.style.strokeDashoffset = circumference;
+                fgCircle.getBoundingClientRect(); // trigger reflow
+                fgCircle.style.transition = "stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1)";
+                fgCircle.style.strokeDashoffset = offset;
+            }
+
+            let current = 0;
+            if (scorePercentage) {
+                scorePercentage.style.transition = "opacity 0.4s ease";
+                scorePercentage.style.opacity = "1";
+                const countInterval = setInterval(() => {
+                    if (current <= targetScore) {
+                        scorePercentage.textContent = current + "%";
+                        current++;
+                    } else {
+                        clearInterval(countInterval);
+                        if (scoreStatus) {
+                            scoreStatus.style.transition = "opacity 0.5s ease";
+                            scoreStatus.style.opacity = "1";
+                        }
+                    }
+                }, 15);
+            }
+        }
     }
 
 });

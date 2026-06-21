@@ -116,35 +116,6 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
                 }
             });
 
-        } else if (role === 'admin') {
-            // Active users count
-            const usersCountRes = await pool.query('SELECT COUNT(*) FROM users');
-            const totalUsers = parseInt(usersCountRes.rows[0].count);
-
-            // Total courses
-            const coursesCountRes = await pool.query('SELECT COUNT(*) FROM courses');
-            const totalCourses = parseInt(coursesCountRes.rows[0].count);
-
-            // Audit activity logs
-            const logsRes = await pool.query(
-                `SELECT l.action, u.name as user_name, l.timestamp 
-                 FROM activity_logs l
-                 LEFT JOIN users u ON l.user_id = u.id
-                 ORDER BY l.timestamp DESC 
-                 LIMIT 4`
-            );
-
-            res.json({
-                totalNodes: 12842 + totalUsers,
-                newSignals: totalCourses,
-                logs: logsRes.rows.map(log => ({
-                    operation: log.action,
-                    source: log.user_name || 'System Network',
-                    time: new Date(log.timestamp).toLocaleTimeString(),
-                    status: 'SUCCESS',
-                    latency: `${Math.floor(Math.random() * 50) + 1}ms`
-                }))
-            });
         }
     } catch (err) {
         console.error(err);
