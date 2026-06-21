@@ -1,7 +1,7 @@
 // backend/controllers/instructorController.js
 const path = require('path');
 const fs = require('fs');
-const { pool } = require('../db/db');
+const { pool } = require('../../db/db');
 const multer = require('multer');
 
 // Configure Multer storage for instructor uploads

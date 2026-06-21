@@ -4,13 +4,24 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const pool = new Pool({
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_DATABASE || 'student_lms'
-});
+// Configure DB connection
+const connectionString = process.env.DATABASE_URL;
+
+const pool = connectionString 
+    ? new Pool({
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false // Required for hosted databases like Render/Railway
+        }
+      })
+    : new Pool({
+        user: process.env.DB_USER || 'postgres',
+        password: process.env.DB_PASSWORD || 'postgres',
+        host: process.env.DB_HOST || 'localhost',
+        port: process.env.DB_PORT || 5432,
+        database: process.env.DB_DATABASE || 'student_lms'
+      });
+
 
 // Check database connection and run schema migrations + seed data
 async function initDb() {
