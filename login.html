@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseVerse - Secure Access</title>
+    <meta name="description" content="Secure portal to enter the CourseVerse constellation. Authenticate your cadet profile.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body-page">
+
+    <!-- Starfield Background Canvas -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="back-home-btn" title="Return to Orbit">
+        <i class="fa-solid fa-arrow-left"></i> Home Orbit
+    </a>
+
+    <!-- Theme Toggle Button -->
+    <button class="back-home-btn" id="theme-toggle-btn" aria-label="Toggle Theme" style="left: auto; right: 40px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border-radius: 50%;">
+        <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <!-- Unified Login & Signup Portal Wrapper -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <!-- Left Side: Interactive Forms -->
+            <div class="login-form-container" id="form-container">
+                
+                <!-- LOGIN FORM -->
+                <div class="form-content-block active" id="login-form-block">
+                    <h1 class="login-title">Secure Access</h1>
+                    <p class="login-subtitle">Identify yourself to enter the learning constellation.</p>
+                    
+                    <!-- Role Tabs -->
+                    <div class="role-selector">
+                        <button class="role-tab active" data-role="student">Student</button>
+                        <button class="role-tab" data-role="instructor">Instructor</button>
+                        <button class="role-tab" data-role="admin">Admin</button>
+                    </div>
+                    
+                    <form class="portal-form" id="portal-login-form">
+                        <!-- Email Field -->
+                        <div class="input-group">
+                            <label class="input-label">Orbital Email</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">@</span>
+                                <input type="email" class="form-input" id="login-email" placeholder="commander@galaxy.edu" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div class="input-group">
+                            <label class="input-label">Access Key</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-input" id="login-password" placeholder="••••••••••••" required>
+                                <button type="button" class="password-toggle-btn" aria-label="Toggle Password Visibility">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Remember & Forgot coordinates -->
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="login-remember">
+                                <span class="checkbox-custom"></span>
+                                Keep me connected
+                            </label>
+                            <a href="#" class="forgot-link">Forgot coordinates?</a>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary warp-submit-btn">
+                            Initiate Warp
+                        </button>
+                    </form>
+                    
+                    <!-- Enrollment Toggle Footer -->
+                    <div class="form-footer">
+                        <span class="footer-prompt-text">Don't have an access permit?</span>
+                        <button class="btn btn-secondary switch-form-btn" id="go-to-signup-btn">
+                            Request Enrollment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SIGN UP / ENROLLMENT FORM (Hidden by default, shown on toggle) -->
+                <div class="form-content-block" id="signup-form-block">
+                    <h1 class="login-title">Request Permit</h1>
+                    <p class="login-subtitle">Enter your details to register as a new CourseVerse cadet.</p>
+                    
+                    <form class="portal-form" id="portal-signup-form">
+                        <!-- Callsign Field -->
+                        <div class="input-group">
+                            <label class="input-label">Cadet Callsign</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-user-astronaut"></i></span>
+                                <input type="text" class="form-input" id="signup-name" placeholder="Alex Grayson" required>
+                            </div>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="input-group">
+                            <label class="input-label">Orbital Email</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon">@</span>
+                                <input type="email" class="form-input" id="signup-email" placeholder="commander@galaxy.edu" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Password Field -->
+                        <div class="input-group">
+                            <label class="input-label">Access Key</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-input" id="signup-password" placeholder="••••••••••••" required>
+                                <button type="button" class="password-toggle-btn" aria-label="Toggle Password Visibility">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Checkbox Terms -->
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="signup-terms" required>
+                                <span class="checkbox-custom"></span>
+                                Accept interstellar protocol
+                            </label>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary warp-submit-btn">
+                            Authorize Cadet
+                        </button>
+                    </form>
+                    
+                    <!-- Enrollment Toggle Footer -->
+                    <div class="form-footer">
+                        <span class="footer-prompt-text">Already registered?</span>
+                        <button class="btn btn-secondary switch-form-btn" id="go-to-login-btn">
+                            Secure Access
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Branding Showcase -->
+            <div class="login-brand-container">
+                <div class="brand-bg-image"></div>
+                <div class="brand-overlay"></div>
+                
+                <div class="brand-content">
+                    <!-- Floating Rocket Icon -->
+                    <div class="brand-floating-icon">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    
+                    <!-- Logo Title & Text -->
+                    <h2 class="brand-logo-text">CourseVerse</h2>
+                    <p class="brand-welcome-sub">Welcome Back to the Galaxy</p>
+                    
+                    <!-- Micro Stats Panel -->
+                    <div class="brand-micro-stats">
+                        <div class="micro-stat">
+                            <span class="stat-num">2.4k+</span>
+                            <span class="stat-lbl">Active Missions</span>
+                        </div>
+                        <div class="micro-stat-divider"></div>
+                        <div class="micro-stat">
+                            <span class="stat-num">150</span>
+                            <span class="stat-lbl">Star Maps</span>
+                        </div>
+                    </div>
+                    
+                    <!-- System telemetry coordinates -->
+                    <div class="brand-system-specs">
+                        <div>SECTOR 7G // COURSEVERSE OS</div>
+                        <div>LAT: 34.02 // LONG: -118.49</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Warp Speed Effect Canvas Overlay -->
+    <canvas id="warp-speed-canvas"></canvas>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

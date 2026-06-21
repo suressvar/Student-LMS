@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseVerse - Master the Universe of Knowledge</title>
+    <meta name="description" content="Embark on a celestial journey of education. From earthbound AI to quantum mechanics, prepare for the next frontier at CourseVerse.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for futuristic icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Background Dynamic Starfield Canvas -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo" id="logo">
+                <span class="logo-text">CourseVerse</span>
+            </a>
+            
+            <nav class="nav-menu">
+                <a href="#curriculum" class="nav-link">Explore</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#community" class="nav-link">Modules</a>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" id="search-constellations" placeholder="Search constellations...">
+                </div>
+                <button class="action-btn" id="bell-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="action-btn" id="theme-toggle-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="action-btn" id="settings-btn" aria-label="Settings">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+                <a href="login.html" class="btn btn-login" id="login-trigger-btn">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge reveal">
+                    <span class="badge-dot"></span> THE GALAXY IS YOUR CLASSROOM
+                </div>
+                <h1 class="hero-title reveal">
+                    Master the <span class="text-glow">Universe</span> of Knowledge
+                </h1>
+                <p class="hero-subtitle reveal">
+                    Embark on a celestial journey of education. From the basics of earthbound AI to the quantum mechanics of distant stars, we prepare you for the next frontier.
+                </p>
+                <div class="hero-ctas reveal">
+                    <button class="btn btn-primary enlist-btn-trigger">
+                        Enlist Now <span class="arrow-icon">🚀</span>
+                    </button>
+                    <button class="btn btn-secondary map-btn-trigger">
+                        <i class="fa-solid fa-map-location-dot"></i> View Star Map
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual reveal">
+                <div class="visual-wrapper">
+                    <div class="hud-corners"></div>
+                    <img src="images/hero_space_station.png" alt="Futuristic Space Station orbiting a planet" class="hero-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galactic Curriculum Section -->
+    <section class="section curriculum-section" id="curriculum">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Galactic Curriculum</h2>
+                <p class="section-subtitle">Explore disciplines curated for the era of interstellar expansion and synthetic intelligence.</p>
+            </div>
+            
+            <div class="curriculum-grid">
+                <!-- Card 1: AI -->
+                <div class="curriculum-card card-purple reveal">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <span class="card-tag">Core Pillar</span>
+                    </div>
+                    <h3 class="card-title">Artificial Intelligence</h3>
+                    <p class="card-description">Neural networks, generative models, and ethical integration in deep-space systems.</p>
+                    <a href="#" class="card-link enlist-btn-trigger">Explore Track <i class="fa-solid fa-arrow-right-long"></i></a>
+                </div>
+
+                <!-- Card 2: Quantum Computing -->
+                <div class="curriculum-card card-cyan reveal">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <span class="card-tag">Advanced</span>
+                    </div>
+                    <h3 class="card-title">Quantum Computing</h3>
+                    <p class="card-description">Qubit manipulation, error correction, and cryptography for secure galaxy communications.</p>
+                    <a href="#" class="card-link enlist-btn-trigger">Explore Track <i class="fa-solid fa-arrow-right-long"></i></a>
+                </div>
+
+                <!-- Card 3: Astro-Design -->
+                <div class="curriculum-card card-pink reveal">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fa-solid fa-user-astronaut"></i>
+                        </div>
+                        <span class="card-tag">Specialized</span>
+                    </div>
+                    <h3 class="card-title">Astro-Design</h3>
+                    <p class="card-description">Designing habitat systems and digital interfaces for low-gravity environments.</p>
+                    <a href="#" class="card-link enlist-btn-trigger">Explore Track <i class="fa-solid fa-arrow-right-long"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI-Powered Learning Section -->
+    <section class="section ai-learning-section">
+        <div class="container ai-learning-grid">
+            <!-- Left Info Panel -->
+            <div class="ai-learning-info reveal">
+                <h2 class="ai-title"><i class="fa-solid fa-wand-magic-sparkles spark-icon"></i> AI-Powered Learning</h2>
+                <p class="ai-desc">Our proprietary Orion AI crafts a unique educational trajectory for every cadet, adapting in real-time to your pace and proficiency.</p>
+                
+                <ul class="ai-features-list">
+                    <li class="ai-feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Dynamic Pacing</strong>
+                            <p>Content difficulty scales automatically based on your real-time performance.</p>
+                        </div>
+                    </li>
+                    <li class="ai-feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="feature-text">
+                            <strong>Predictive Gaps</strong>
+                            <p>AI identifies conceptual weak points before they become obstacles.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Interactive Cards -->
+            <div class="ai-learning-cards">
+                <!-- Personalized Path Card -->
+                <div class="interactive-path-card reveal" id="personalized-path-interactive">
+                    <div class="path-card-bg-glow"></div>
+                    <div class="path-icon-top"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3 class="path-title">Personalized Path</h3>
+                    <p class="path-subtitle">Orion analyzed <span id="analyzed-points">4,000</span> data points to create your Quantum Physics module.</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar-fill" style="width: 75%;"></div>
+                    </div>
+                    <span class="progress-label">75% PATH OPTIMIZATION</span>
+                </div>
+
+                <!-- Live Mentorship Card -->
+                <div class="interactive-mentor-card reveal">
+                    <div class="mentor-card-bg-glow"></div>
+                    <div class="mentor-icon-top"><i class="fa-solid fa-circle-nodes"></i></div>
+                    <h3 class="mentor-title">Live Mentorship</h3>
+                    <p class="mentor-subtitle">Connect with Synthetic Mentors 24/7 for instant query resolution and deep-dives.</p>
+                    <div class="mentor-avatars">
+                        <div class="avatar avatar-1" title="Mentor Orion">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="48" fill="#131b35" stroke="#8b5cf6" stroke-width="2"/>
+                                <circle cx="50" cy="40" r="18" fill="#8b5cf6"/>
+                                <path d="M25,75 Q50,55 75,75 Z" fill="#8b5cf6"/>
+                            </svg>
+                        </div>
+                        <div class="avatar avatar-2" title="Mentor Nova">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="48" fill="#0c1d28" stroke="#00f0ff" stroke-width="2"/>
+                                <circle cx="50" cy="40" r="18" fill="#00f0ff"/>
+                                <path d="M25,75 Q50,55 75,75 Z" fill="#00f0ff"/>
+                            </svg>
+                        </div>
+                        <div class="avatar avatar-3" title="Mentor Polaris">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="48" fill="#20152b" stroke="#ec4899" stroke-width="2"/>
+                                <circle cx="50" cy="40" r="18" fill="#ec4899"/>
+                                <path d="M25,75 Q50,55 75,75 Z" fill="#ec4899"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Counter Section -->
+    <section class="section stats-section">
+        <div class="container stats-grid">
+            <div class="stat-card reveal" data-target="10000" data-suffix="k+">
+                <div class="stat-number">0k+</div>
+                <div class="stat-label">GALACTIC COURSES</div>
+            </div>
+            
+            <div class="stat-card reveal stat-glow-purple" data-target="5000000" data-suffix="M+">
+                <div class="stat-number">0M+</div>
+                <div class="stat-label">ACTIVE CADETS</div>
+            </div>
+            
+            <div class="stat-card reveal stat-glow-cyan" data-target="98" data-suffix="%">
+                <div class="stat-number">0%</div>
+                <div class="stat-label">COMPLETION RATE</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Cadet Community Section -->
+    <section class="section community-section" id="community">
+        <div class="container community-grid">
+            <!-- Left Info Pane -->
+            <div class="community-info reveal">
+                <div class="community-badge">BEYOND BORDERS / INTERSTELLAR</div>
+                <h2 class="community-title">The Cadet Community</h2>
+                <p class="community-desc">Join a global—and extra-planetary—collective of research teams, creators, and engineers. Collaborate in immersive glass-labs and build the future together.</p>
+                
+                <div class="community-stats-small">
+                    <div class="small-stat-item">
+                        <h4>300+ Squads</h4>
+                        <p>Active study groups forming every hour in all timezones.</p>
+                    </div>
+                    <div class="small-stat-item">
+                        <h4>Live Labs</h4>
+                        <p>Real-time collaborative environments for practical modules.</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary enlist-btn-trigger community-join-btn">
+                    Join the Collective <i class="fa-solid fa-user-group" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+
+            <!-- Right Visual Pane -->
+            <div class="community-visual reveal">
+                <div class="community-img-wrapper">
+                    <div class="hud-frame"></div>
+                    <img src="images/cadet_community.png" alt="Cadets using interactive holograms" class="community-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <!-- Logo & Brand info -->
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">CourseVerse</a>
+                <p class="footer-desc">Defining the next century of education through technology and science.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Globe Website"><i class="fa-solid fa-globe"></i></a>
+                    <a href="#" aria-label="Slack Channel"><i class="fa-brands fa-slack"></i></a>
+                    <a href="#" aria-label="Twitter X Account"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <!-- Navigation Lists -->
+            <div class="footer-links-col">
+                <h4 class="footer-heading">LEARNING</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Pathways</a></li>
+                    <li><a href="#">Degrees</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links-col">
+                <h4 class="footer-heading">COMPANY</h4>
+                <ul class="footer-links-list">
+                    <li><a href="#">Mission</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter Transmission Box -->
+            <div class="footer-newsletter">
+                <h4 class="footer-heading">TRANSMISSION</h4>
+                <p class="newsletter-desc">Receive the latest curriculum updates in your inbox.</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" class="newsletter-input" id="newsletter-email" placeholder="enter your email..." required>
+                    <button type="submit" class="newsletter-submit-btn" aria-label="Send Email">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+                <div class="newsletter-feedback" id="newsletter-success">Transmission frequency locked! 🚀</div>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>&copy; 2026 CourseVerse Galactic Inc. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Protocol</a>
+                <a href="#">Honor Guidelines</a>
+                <a href="#">Interstellar Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE MODAL 1: STAR MAP OVERLAY -->
+    <div class="modal star-map-modal" id="star-map-modal">
+        <div class="modal-bg-overlay"></div>
+        <div class="star-map-container">
+            <button class="modal-close-btn" id="close-map-btn" aria-label="Close Map">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="map-hud-header">
+                <h2>GALACTIC NAVIGATION CONSTELLATION</h2>
+                <p>Drag map to explore stars. Hover/click nodes to reveal specialized academies.</p>
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="star-map-canvas"></canvas>
+            </div>
+            
+            <div class="map-details-card" id="node-details-card">
+                <h3 id="node-title">Academy System</h3>
+                <span class="node-level" id="node-level">Level: Introductory</span>
+                <p id="node-desc">Hover over any coordinate node to interface with galactic curricula.</p>
+                <div class="node-stats">
+                    <span><i class="fa-solid fa-graduation-cap"></i> Modules: <strong id="node-modules">N/A</strong></span>
+                    <span><i class="fa-regular fa-clock"></i> Est. Duration: <strong id="node-duration">N/A</strong></span>
+                </div>
+                <button class="btn btn-primary enlist-btn-trigger" id="node-enlist-btn">Lock In Path</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE MODAL 2: TERMINAL CADET ENLISTMENT -->
+    <div class="modal terminal-modal" id="terminal-modal">
+        <div class="modal-bg-overlay"></div>
+        <div class="terminal-container">
+            <div class="terminal-bar">
+                <div class="terminal-dots">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                </div>
+                <div class="terminal-title">ORION DIRECT ENLISTMENT UTILITY</div>
+                <button class="modal-close-btn terminal-close" id="close-terminal-btn" aria-label="Close Terminal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="terminal-body" id="terminal-screen">
+                <div class="terminal-output" id="terminal-output"></div>
+                <div class="terminal-input-line">
+                    <span class="prompt-symbol">&gt;</span>
+                    <input type="text" class="terminal-input" id="terminal-input" autocomplete="off" autofocus>
+                </div>
+            </div>
+
+            <!-- Final Cadet Badge Showcase (hidden initially) -->
+            <div class="cadet-badge-card" id="cadet-badge-card">
+                <div class="badge-glow-overlay"></div>
+                <div class="badge-header">
+                    <div class="badge-logo">CourseVerse</div>
+                    <span class="badge-status">CADET ACTIVATED</span>
+                </div>
+                
+                <div class="badge-details-grid">
+                    <div class="badge-avatar-container">
+                        <svg viewBox="0 0 100 100" class="badge-avatar-svg">
+                            <circle cx="50" cy="50" r="48" fill="#131b35" stroke="#00f0ff" stroke-width="2"/>
+                            <!-- Abstract glowing holographic avatar -->
+                            <polygon points="50,20 65,40 50,60 35,40" fill="none" stroke="#00f0ff" stroke-width="2"/>
+                            <circle cx="50" cy="40" r="6" fill="#00f0ff"/>
+                            <path d="M25,80 L75,80 A 25 25 0 0 0 25 80" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="badge-info">
+                        <div class="info-group">
+                            <label>CADET IDENTIFIER</label>
+                            <h3 id="badge-name">COMMANDER ALEX</h3>
+                        </div>
+                        <div class="info-group">
+                            <label>DIVISION PATHWAY</label>
+                            <h3 id="badge-track">QUANTUM MECHANICS & AI</h3>
+                        </div>
+                        <div class="info-group">
+                            <label>ENLISTMENT TIMESTAMP</label>
+                            <h3 id="badge-time">2026.06.21.11.24</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="badge-footer">
+                    <div class="badge-bar-code"></div>
+                    <button class="btn btn-primary" id="badge-print-btn">Acknowledge Command</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

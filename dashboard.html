@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseVerse Command Center - Dashboard</title>
+    <meta name="description" content="Access CourseVerse modules, telemetry tracking, and galactic research grids.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Starfield Background Canvas -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Side Navigation Bar -->
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+            <a href="index.html" class="sidebar-logo">CourseVerse</a>
+            <span class="sidebar-sub">DEEP SPACE LEARNING</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-nav-link active">
+                <i class="fa-solid fa-gauge-high"></i> Galaxy Dashboard
+            </a>
+            <a href="#" class="sidebar-nav-link">
+                <i class="fa-solid fa-graduation-cap"></i> Learning Modules
+            </a>
+            <a href="#" class="sidebar-nav-link">
+                <i class="fa-solid fa-map-location-dot"></i> Star Maps
+            </a>
+            <a href="#" class="sidebar-nav-link">
+                <i class="fa-solid fa-flask-vial"></i> Research Lab
+            </a>
+            <a href="#" class="sidebar-nav-link">
+                <i class="fa-solid fa-box-archive"></i> Archives
+            </a>
+        </nav>
+        
+        <button class="btn btn-primary sidebar-action-btn">
+            <i class="fa-solid fa-rocket"></i> New Mission
+        </button>
+        
+        <div class="sidebar-footer">
+            <a href="#" class="sidebar-footer-link">
+                <i class="fa-solid fa-circle-question"></i> Support
+            </a>
+            <a href="index.html" class="sidebar-footer-link logout-trigger" id="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Exit
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Frame -->
+    <main class="dashboard-main">
+        
+        <!-- Header area (Header details populated dynamically by JS based on user role) -->
+        <header class="dashboard-header">
+            <h1 class="header-title" id="dash-header-title">Mission Control</h1>
+            
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search constellations...">
+                </div>
+                
+                <button class="action-btn" id="bell-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                
+                <button class="action-btn" id="theme-toggle-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="action-btn" id="settings-btn" aria-label="Settings">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+                
+                <!-- Profile details -->
+                <div class="profile-widget">
+                    <div class="profile-text">
+                        <span class="profile-name" id="user-profile-name">Cmdr. Astro</span>
+                        <span class="profile-level" id="user-profile-level">LEVEL 42 ARCHITECT</span>
+                    </div>
+                    <div class="profile-avatar" id="user-profile-avatar">
+                        <!-- Default Student Avatar SVG -->
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="46" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2"/>
+                            <polygon points="50,22 64,40 50,58 36,40" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                            <circle cx="50" cy="40" r="6" fill="#8b5cf6"/>
+                            <path d="M25,78 L75,78 A 25 25 0 0 0 25 78" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Wrappers -->
+        <div class="dashboard-content">
+
+            <!-- ========================================================
+                 DASHBOARD 1: STUDENT VIEW ("Mission Control")
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="student-dash">
+                <div class="student-grid">
+                    
+                    <!-- Left: Current Objective -->
+                    <div class="dash-card current-objective-card">
+                        <div class="card-glow-overlay"></div>
+                        <span class="objective-header">CURRENT OBJECTIVE</span>
+                        <h2 class="objective-title">Quantum UI Design</h2>
+                        <p class="objective-desc">Next: Interstellar Accessibility Modules</p>
+                        
+                        <div class="radial-progress-box">
+                            <svg class="progress-ring" width="140" height="140">
+                                <circle class="progress-ring-circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="54" cx="70" cy="70"/>
+                                <circle class="progress-ring-circle" stroke="#8b5cf6" stroke-width="8" stroke-dasharray="339.29" stroke-dashoffset="50.89" fill="transparent" r="54" cx="70" cy="70"/>
+                            </svg>
+                            <div class="progress-text-overlay">
+                                <strong>85%</strong>
+                                <span>COMPLETE</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary resume-btn">Resume Session</button>
+                    </div>
+
+                    <!-- Middle Column Upper Cards -->
+                    <div class="middle-col-cards">
+                        <!-- Velocity Card -->
+                        <div class="dash-card velocity-card">
+                            <span class="card-title-small">Learning Velocity</span>
+                            <div class="velocity-row">
+                                <h3 class="velocity-value">1.4x</h3>
+                                <div class="velocity-icon-trend"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                            </div>
+                            
+                            <!-- Mini Sparkline Graph SVG -->
+                            <div class="sparkline-container">
+                                <svg viewBox="0 0 160 50" class="sparkline-svg">
+                                    <rect x="0" y="35" width="20" height="15" fill="rgba(6, 182, 212, 0.2)" rx="2"/>
+                                    <rect x="30" y="25" width="20" height="25" fill="rgba(6, 182, 212, 0.4)" rx="2"/>
+                                    <rect x="60" y="30" width="20" height="20" fill="rgba(6, 182, 212, 0.3)" rx="2"/>
+                                    <rect x="90" y="15" width="20" height="35" fill="rgba(6, 182, 212, 0.7)" rx="2"/>
+                                    <rect x="120" y="5" width="20" height="45" fill="rgb(6, 182, 212)" rx="2" class="bar-glow-cyan"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Time Spent Card -->
+                        <div class="dash-card time-spent-card">
+                            <span class="card-title-small">Total Time Spent</span>
+                            <div class="time-row">
+                                <h3 class="time-value">12h 4m</h3>
+                                <div class="time-clock-icon"><i class="fa-regular fa-clock"></i></div>
+                            </div>
+                            
+                            <!-- Friends Online indicator -->
+                            <div class="friends-indicator">
+                                <div class="friends-avatars">
+                                    <div class="friend-avatar bg-purple">A</div>
+                                    <div class="friend-avatar bg-cyan">N</div>
+                                    <div class="friend-avatar bg-pink">P</div>
+                                </div>
+                                <span class="friends-label">+3 friends online</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Urgent Tasks -->
+                    <div class="dash-card urgent-tasks-card">
+                        <div class="tasks-header">
+                            <h3>URGENT TASKS</h3>
+                            <span class="tasks-badge">2 PENDING</span>
+                        </div>
+                        
+                        <div class="tasks-list">
+                            <!-- Task 1 -->
+                            <div class="task-item">
+                                <div class="task-icon"><i class="fa-solid fa-clipboard-question"></i></div>
+                                <div class="task-info">
+                                    <h4>Temporal Latency Quiz</h4>
+                                    <span><i class="fa-regular fa-calendar-days"></i> Due in 2h 15m</span>
+                                </div>
+                            </div>
+                            <!-- Task 2 -->
+                            <div class="task-item">
+                                <div class="task-icon text-cyan"><i class="fa-solid fa-file-invoice"></i></div>
+                                <div class="task-info">
+                                    <h4>Galaxy Lab Report</h4>
+                                    <span><i class="fa-regular fa-calendar-days"></i> Due Tomorrow</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-secondary schedule-btn">View Master Schedule</button>
+                    </div>
+
+                    <!-- Bottom Left: Active Research Labs -->
+                    <div class="dash-card active-labs-card">
+                        <div class="card-header-labs">
+                            <div class="labs-title">
+                                <h3>Active Research Labs</h3>
+                                <span class="badge-live">LIVE</span>
+                            </div>
+                            <p class="labs-desc">Real-time peer node distribution across Sector 7G</p>
+                        </div>
+                        
+                        <!-- Rotating 3D Constellation Canvas -->
+                        <div class="labs-canvas-container">
+                            <canvas id="constellation-canvas"></canvas>
+                        </div>
+                        
+                        <div class="labs-footer">
+                            <span class="navigators-online"><span class="dot-blink"></span> 3 Navigators Online</span>
+                            <span class="active-nodes-badge"><i class="fa-solid fa-circle-nodes"></i> 12 active nodes</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Right: Shortcuts and Tips -->
+                    <div class="bottom-right-panel">
+                        <!-- Navigation tip widget -->
+                        <div class="dash-card navigation-tip-card">
+                            <div class="tip-overlay-gradient"></div>
+                            <div class="tip-content">
+                                <span class="tip-tag"><i class="fa-solid fa-lightbulb"></i> NAVIGATION TIP</span>
+                                <h3 class="tip-title">Master the Nebula Keyboard Shortcuts</h3>
+                                <p class="tip-desc">Press <kbd>Alt + G</kbd> to quickly switch between open star map modules without leaving your dashboard.</p>
+                            </div>
+                        </div>
+
+                        <!-- Recent Broadcasts -->
+                        <div class="broadcasts-card">
+                            <h4>RECENT BROADCASTS</h4>
+                            <ul class="broadcasts-list">
+                                <li>
+                                    <span class="bullet blue"></span>
+                                    <p>Professor Elara posted new <strong>Reading Logs</strong> for Sector 3.</p>
+                                </li>
+                                <li>
+                                    <span class="bullet purple"></span>
+                                    <p>You achieved the <strong>Warp Speed Learner</strong> badge.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 DASHBOARD 2: INSTRUCTOR VIEW ("Command Center")
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="instructor-dash">
+                <div class="instructor-grid">
+                    
+                    <!-- Top: Revenue Telemetry Graph -->
+                    <div class="dash-card revenue-card">
+                        <div class="revenue-info">
+                            <span class="rev-header"><i class="fa-solid fa-chart-line"></i> REVENUE TELEMETRY</span>
+                            <h2 class="rev-value">$42.8k <span class="rev-trend"><i class="fa-solid fa-arrow-trend-up"></i> +12%</span></h2>
+                            <p class="rev-desc">Course subscriptions and research grants have increased across all quadrants this lunar cycle.</p>
+                        </div>
+                        <div class="revenue-chart">
+                            <!-- Custom SVG bar chart -->
+                            <svg viewBox="0 0 300 120" class="rev-chart-svg">
+                                <rect x="30" y="70" width="22" height="50" fill="rgba(6, 182, 212, 0.25)" rx="4"/>
+                                <rect x="80" y="50" width="22" height="70" fill="rgba(139, 92, 246, 0.4)" rx="4"/>
+                                <rect x="130" y="60" width="22" height="60" fill="rgba(6, 182, 212, 0.25)" rx="4"/>
+                                <rect x="180" y="30" width="22" height="90" fill="rgba(139, 92, 246, 0.6)" rx="4"/>
+                                <rect x="230" y="10" width="22" height="110" fill="var(--clr-cyan)" rx="4" class="bar-glow-cyan"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Middle Left: Cadet Satisfaction -->
+                    <div class="dash-card satisfaction-card">
+                        <div class="sat-icon-box"><i class="fa-regular fa-star"></i></div>
+                        <div class="sat-details">
+                            <span class="sat-label">CADET SATISFACTION</span>
+                            <h3 class="sat-value">4.9/5</h3>
+                            <div class="sat-progress-bar">
+                                <div class="sat-progress-fill" style="width: 98%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Right: Grading Queue -->
+                    <div class="dash-card grading-card">
+                        <div class="grad-icon-box"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div class="grad-details">
+                            <span class="grad-label">GRADING QUEUE</span>
+                            <h3 class="grad-value">27 Missions</h3>
+                            <span class="grad-priority">Priority: Deep Space Theory</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Left: Active Module Details -->
+                    <div class="dash-card active-module-card">
+                        <div class="module-bg-mesh"></div>
+                        <div class="module-content">
+                            <span class="module-tag"><i class="fa-solid fa-atom"></i> ACTIVE MODULE</span>
+                            <h2 class="module-name">Quantum Mechanics for Navigators</h2>
+                            
+                            <div class="module-stats-row">
+                                <div class="m-stat">
+                                    <i class="fa-solid fa-user-group"></i>
+                                    <div>
+                                        <strong>1,240</strong>
+                                        <span>ENROLLED CADETS</span>
+                                    </div>
+                                </div>
+                                <div class="m-stat">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <div>
+                                        <strong>82%</strong>
+                                        <span>AVG. COMPLETION</span>
+                                    </div>
+                                </div>
+                                <div class="m-stat">
+                                    <i class="fa-solid fa-bolt"></i>
+                                    <div>
+                                        <strong>+15%</strong>
+                                        <span>VELOCITY THIS WEEK</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary manage-course-btn">
+                                Manage Course <i class="fa-solid fa-arrow-right-long" style="margin-left: 8px;"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: System Alerts & Server info -->
+                    <div class="instructor-right-col">
+                        <!-- System alerts -->
+                        <div class="dash-card alerts-panel-card">
+                            <div class="alerts-header">
+                                <h3>SYSTEM ALERTS</h3>
+                                <span class="alerts-badge">Real-time</span>
+                            </div>
+                            
+                            <div class="alerts-list">
+                                <!-- Alert 1: Critical -->
+                                <div class="alert-box alert-critical">
+                                    <div class="alert-indicator-bar"></div>
+                                    <div class="alert-body">
+                                        <div class="alert-top">
+                                            <span class="alert-title-text"><i class="fa-solid fa-circle-exclamation text-pink"></i> Submission Spike</span>
+                                            <span class="alert-time-text">2m ago</span>
+                                        </div>
+                                        <p class="alert-desc-text">Abnormal volume of 'Warp Field Dynamics' assignments received.</p>
+                                        <div class="alert-actions">
+                                            <button class="btn-alert-action primary">Analyze</button>
+                                            <button class="btn-alert-action">Dismiss</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Alert 2: Info -->
+                                <div class="alert-box alert-info">
+                                    <div class="alert-indicator-bar blue"></div>
+                                    <div class="alert-body">
+                                        <div class="alert-top">
+                                            <span class="alert-title-text"><i class="fa-solid fa-message text-blue"></i> Discussion Hotspot</span>
+                                            <span class="alert-time-text">1h ago</span>
+                                        </div>
+                                        <p class="alert-desc-text">High engagement on 'Black Hole Ethics' forum module.</p>
+                                        <div class="alert-avatars-row">
+                                            <div class="alert-avatars-stack">
+                                                <div class="avatar-mini bg-purple"></div>
+                                                <div class="avatar-mini bg-cyan"></div>
+                                                <div class="avatar-mini bg-pink"></div>
+                                            </div>
+                                            <span class="avatars-count-lbl">+12</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Servers status -->
+                        <div class="dash-card servers-status-card">
+                            <div class="servers-header">
+                                <h4>Sublight Servers</h4>
+                                <span class="servers-indicator-dot"></span>
+                            </div>
+                            <div class="servers-stat-group">
+                                <div class="stat-progress-label">
+                                    <span>LATENCY</span>
+                                    <strong>14MS</strong>
+                                </div>
+                                <div class="bar-container">
+                                    <div class="bar-fill green-glow" style="width: 15%;"></div>
+                                </div>
+                            </div>
+                            <div class="servers-stat-group">
+                                <div class="stat-progress-label">
+                                    <span>BANDWIDTH</span>
+                                    <strong>89%</strong>
+                                </div>
+                                <div class="bar-container">
+                                    <div class="bar-fill purple-glow" style="width: 89%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 DASHBOARD 3: ADMIN VIEW ("Intelligence Center")
+                 ======================================================== -->
+            <div class="role-dashboard-wrapper" id="admin-dash">
+                <div class="admin-grid">
+                    
+                    <!-- Top Wide: Global Telemetry Map -->
+                    <div class="dash-card telemetry-card">
+                        <div class="telemetry-header">
+                            <div class="telemetry-info-text">
+                                <span class="tel-tag"><i class="fa-solid fa-globe"></i> GLOBAL FLEET TELEMETRY</span>
+                                <h2 class="tel-title">Interactive User Distribution Map</h2>
+                                <p class="tel-desc">Real-time visualization of academic agents currently active across the Andromeda and Milky Way sectors.</p>
+                            </div>
+                            <div class="telemetry-counters">
+                                <div class="tel-counter">
+                                    <span>TOTAL NODES</span>
+                                    <strong>12,842</strong>
+                                </div>
+                                <div class="tel-counter">
+                                    <span>NEW SIGNALS</span>
+                                    <strong class="text-cyan">+148</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Telemetry Galaxy Map Canvas -->
+                        <div class="telemetry-canvas-container">
+                            <canvas id="galaxy-map-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column Left: Circular Compute & Storage Analytics -->
+                    <div class="analytics-row-cards">
+                        <!-- Compute Card -->
+                        <div class="dash-card analytic-circle-card">
+                            <div class="circle-chart-wrapper">
+                                <svg class="circle-svg" width="120" height="120">
+                                    <circle class="circle-bg" stroke="rgba(255,255,255,0.04)" stroke-width="8" fill="transparent" r="46" cx="60" cy="60"/>
+                                    <circle class="circle-fill stroke-purple" stroke="#8b5cf6" stroke-width="8" stroke-dasharray="289.02" stroke-dashoffset="52.02" fill="transparent" r="46" cx="60" cy="60"/>
+                                </svg>
+                                <div class="circle-val-text">82%</div>
+                            </div>
+                            <h4 class="analytic-title-lbl">CLOUD COMPUTE</h4>
+                            <p class="analytic-desc-text">Deep-core processing at peak efficiency. Parallel threads executing mission configurations.</p>
+                            <a href="#" class="analytic-link">Manage Allocation <i class="fa-solid fa-angle-right"></i></a>
+                        </div>
+
+                        <!-- Storage Card -->
+                        <div class="dash-card analytic-circle-card">
+                            <div class="circle-chart-wrapper">
+                                <svg class="circle-svg" width="120" height="120">
+                                    <circle class="circle-bg" stroke="rgba(255,255,255,0.04)" stroke-width="8" fill="transparent" r="46" cx="60" cy="60"/>
+                                    <circle class="circle-fill stroke-cyan" stroke="#06b6d4" stroke-width="8" stroke-dasharray="289.02" stroke-dashoffset="158.96" fill="transparent" r="46" cx="60" cy="60"/>
+                                </svg>
+                                <div class="circle-val-text">45%</div>
+                            </div>
+                            <h4 class="analytic-title-lbl">QUANTUM STORAGE</h4>
+                            <p class="analytic-desc-text">Archive capacity optimized. Data fragmentation reduced by 14% since last maintenance check.</p>
+                            <a href="#" class="analytic-link">View Archives <i class="fa-solid fa-angle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Middle Column Right: Anomalies Panel -->
+                    <div class="dash-card anomalies-card">
+                        <div class="anomalies-header">
+                            <h3><i class="fa-solid fa-triangle-exclamation"></i> Critical Anomalies</h3>
+                            <span class="anomalies-badge">12 UNRESOLVED</span>
+                        </div>
+                        
+                        <div class="anomalies-list">
+                            <!-- Anomaly 1: Critical -->
+                            <div class="anomaly-item">
+                                <div class="anomaly-meta">
+                                    <span class="anomaly-code">CODE: XA-421</span>
+                                    <span class="anomaly-severity critical">CRITICAL</span>
+                                </div>
+                                <h4 class="anomaly-title">Signal Distortion: Sector 9</h4>
+                                <p class="anomaly-desc">Learning node 9-Beta reports recursive loop cycle, immediate intervention requested.</p>
+                                <div class="anomaly-actions">
+                                    <button class="btn-anomaly primary">Isolate</button>
+                                    <button class="btn-anomaly">Dismiss</button>
+                                </div>
+                            </div>
+
+                            <!-- Anomaly 2: Moderate -->
+                            <div class="anomaly-item">
+                                <div class="anomaly-meta">
+                                    <span class="anomaly-code">CODE: RT-900</span>
+                                    <span class="anomaly-severity moderate">MODERATE</span>
+                                </div>
+                                <h4 class="anomaly-title">Entropy Warning: Data Core</h4>
+                                <p class="anomaly-desc">Mirror packet loss detected in the starmap syncing service buffer.</p>
+                                <div class="anomaly-actions">
+                                    <button class="btn-anomaly primary text-cyan">Repair</button>
+                                    <button class="btn-anomaly">Dismiss</button>
+                                </div>
+                            </div>
+
+                            <!-- Anomaly 3: Low -->
+                            <div class="anomaly-item">
+                                <div class="anomaly-meta">
+                                    <span class="anomaly-code">CODE: ZT-114</span>
+                                    <span class="anomaly-severity low">LOW</span>
+                                </div>
+                                <h4 class="anomaly-title">User Auth Outlier</h4>
+                                <p class="anomaly-desc">Login attempt flagged from unauthorized quadrant 14, Protocol 4 initiated.</p>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-secondary anomalies-btn">OPEN FULL QUEUE</button>
+                    </div>
+
+                    <!-- Bottom Row Left: Data Velocity Wave Graph -->
+                    <div class="dash-card velocity-graph-card">
+                        <div class="vel-header">
+                            <div class="vel-info-titles">
+                                <h3>Data Velocity</h3>
+                                <p>Global throughput across all learning nodes</p>
+                            </div>
+                            <div class="vel-value-box">
+                                <span class="val-num">472 <span class="val-unit">GB/s</span></span>
+                                <span class="val-percentage"><i class="fa-solid fa-arrow-trend-up"></i> +12.4% vs last hr</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Smooth wave path Canvas -->
+                        <div class="vel-canvas-container">
+                            <canvas id="data-velocity-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row Right: Action Center -->
+                    <div class="dash-card action-center-card">
+                        <h4>COMMAND CENTER</h4>
+                        <div class="actions-grid">
+                            <button class="action-btn-huge">
+                                <i class="fa-solid fa-terminal"></i>
+                                <span>REMOTE SHELL</span>
+                            </button>
+                            <button class="action-btn-huge">
+                                <i class="fa-solid fa-tower-broadcast"></i>
+                                <span>BROADCAST</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Wide Table: Fleet Activity Logs -->
+                    <div class="dash-card activity-table-card">
+                        <div class="table-header">
+                            <div class="table-title">
+                                <h3>Recent Fleet Activity</h3>
+                                <p>Audited logs from the past 12 interstellar cycles</p>
+                            </div>
+                            <button class="btn btn-secondary export-btn">EXPORT JSON</button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="logs-table">
+                                <thead>
+                                    <tr>
+                                        <th>OPERATION</th>
+                                        <th>SOURCE NODE</th>
+                                        <th>TIME (UTC)</th>
+                                        <th>STATUS</th>
+                                        <th>LATENCY</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Quantum Hash Verification</strong></td>
+                                        <td>Central Core 01</td>
+                                        <td>14:22:08</td>
+                                        <td><span class="status-pill status-success"><span class="dot"></span> SUCCESS</span></td>
+                                        <td>12ms</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nebula-Sync Indexing</strong></td>
+                                        <td>Outpost-Echo</td>
+                                        <td>14:18:52</td>
+                                        <td><span class="status-pill status-success"><span class="dot"></span> SUCCESS</span></td>
+                                        <td>420ms</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Neural Pattern Upload</strong></td>
+                                        <td>Agent-Rykard</td>
+                                        <td>14:15:19</td>
+                                        <td><span class="status-pill status-processing"><span class="dot"></span> PROCESSING</span></td>
+                                        <td>88ms</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Firewall Breach Deflection</strong></td>
+                                        <td>Shield-Gate-4</td>
+                                        <td>13:58:33</td>
+                                        <td><span class="status-pill status-secured"><span class="dot"></span> SECURED</span></td>
+                                        <td>2ms</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Dashboard footer info -->
+        <footer class="dashboard-footer">
+            <div class="footer-left" id="footer-left-info">
+                COURSEVERSE COMMAND CENTER v2.8.4
+                <span class="footer-sync-time">LAST SYNC: 14:02 STARDATE:442.1</span>
+            </div>
+            
+            <div class="footer-center" id="footer-neural-status">
+                <span class="status-pulse-dot"></span> NEURAL LINK STABLE
+            </div>
+
+            <div class="footer-right-links" id="footer-right-links">
+                <a href="#">Privacy Protocol</a>
+                <a href="#">Safety Systems</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Floating Chat Trigger -->
+    <button class="chat-floating-btn" id="open-ai-btn" aria-label="Orion Chatbot Assistant"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+
+    <!-- AI Chatbot Drawer -->
+    <div class="ai-drawer" id="ai-drawer">
+        <div class="ai-drawer-header">
+            <h2><i class="fa-solid fa-robot"></i> Orion AI Assistant</h2>
+            <button class="ai-drawer-close" id="close-ai-btn" aria-label="Close Chat">&times;</button>
+        </div>
+        <div class="ai-drawer-actions">
+            <button class="ai-act-btn" id="ai-btn-quiz"><i class="fa-solid fa-graduation-cap"></i> Practice Quiz</button>
+            <button class="ai-act-btn" id="ai-btn-insights"><i class="fa-solid fa-chart-line"></i> Insights</button>
+            <button class="ai-act-btn" id="ai-btn-plan"><i class="fa-solid fa-calendar-days"></i> Study Plan</button>
+        </div>
+        <div class="ai-chat-body" id="ai-chat-body">
+            <div class="ai-message assistant">
+                Hello Cadet! I am Orion. How can I assist you in mastering the galactic curriculum today?
+            </div>
+        </div>
+        <div class="ai-chat-input-area">
+            <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Ask Orion anything...">
+            <button class="ai-chat-send" id="ai-chat-send" aria-label="Send Message"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Course Catalog Modal -->
+    <div class="lms-modal" id="catalog-modal">
+        <div class="lms-modal-content">
+            <div class="lms-modal-header">
+                <h2>Stellar Module Catalog</h2>
+                <button class="lms-modal-close" id="close-catalog-btn" aria-label="Close Catalog">&times;</button>
+            </div>
+            <div class="lms-modal-body">
+                <div class="course-catalog-grid" id="course-catalog-grid">
+                    <!-- Dynamic Courses -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Viewer Modal -->
+    <div class="lms-modal" id="course-view-modal">
+        <div class="lms-modal-content" style="max-width: 900px;">
+            <div class="lms-modal-header">
+                <h2 id="course-view-title">Course Title</h2>
+                <button class="lms-modal-close" id="close-course-view-btn" aria-label="Close Course">&times;</button>
+            </div>
+            <div class="lms-modal-body">
+                <div id="course-view-outcomes" style="margin-bottom: 20px; color: var(--clr-cyan); font-weight: 500; letter-spacing: 0.5px;"></div>
+                <div id="course-view-desc" style="margin-bottom: 30px; line-height: 1.5; color: var(--text-secondary);"></div>
+                
+                <h3 style="margin-bottom: 16px; font-family: var(--font-heading); color: #fff;">Learning Modules</h3>
+                <div class="modules-accordion" id="modules-accordion">
+                    <!-- Dynamic Modules Accordion -->
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 16px; font-family: var(--font-heading); color: #fff;">Course Assignments</h3>
+                <div id="course-assignments-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+                    <!-- Dynamic Assignments List -->
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 16px; font-family: var(--font-heading); color: #fff;">Assessments & Quizzes</h3>
+                <div id="course-quizzes-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+                    <!-- Dynamic Quizzes List -->
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 16px; font-family: var(--font-heading); color: #fff;">Sector Discussion Board</h3>
+                <div id="course-forum-section" style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 20px;">
+                    <div id="forum-posts-container" style="display:flex; flex-direction:column; gap:16px; max-height: 250px; overflow-y: auto; margin-bottom: 16px;">
+                        <!-- Dynamic Forum Threads -->
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="forum-post-input" placeholder="Transmit thoughts to this board..." style="flex-grow:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; color:#fff; font-size:0.85rem; border-color: rgba(255,255,255,0.08);">
+                        <button class="btn btn-primary" id="forum-post-send" style="padding: 10px 20px; font-size: 0.85rem;">Post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Take Quiz Modal -->
+    <div class="lms-modal" id="quiz-modal">
+        <div class="lms-modal-content">
+            <div class="lms-modal-header">
+                <h2 id="quiz-modal-title">Stellar Assessment</h2>
+                <div id="quiz-timer" style="color: var(--clr-pink); font-family: var(--font-heading); font-weight: bold; font-size: 1.1rem;">Time: 10:00</div>
+            </div>
+            <div class="lms-modal-body">
+                <form id="quiz-form">
+                    <div id="quiz-questions-container">
+                        <!-- Dynamic Quiz Questions -->
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Submit Transmission Answers</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
