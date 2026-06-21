@@ -99,7 +99,7 @@
             <div class="hero-visual reveal">
                 <div class="visual-wrapper">
                     <div class="hud-corners"></div>
-                    <img src="images/hero_space_station.png" alt="Futuristic Space Station orbiting a planet" class="hero-img">
+                    <canvas id="hero-3d-canvas" class="hero-img"></canvas>
                 </div>
             </div>
         </div>
@@ -374,7 +374,7 @@
             <div class="community-visual reveal">
                 <div class="community-img-wrapper">
                     <div class="hud-frame"></div>
-                    <img src="images/cadet_community.png" alt="Cadets using interactive holograms" class="community-img">
+                    <canvas id="community-3d-canvas" class="community-img"></canvas>
                 </div>
             </div>
         </div>
@@ -657,5 +657,6 @@
     <!-- Scripts -->
     <script src="bg3d.js?v=2"></script>
     <script src="app.js?v=3"></script>
+    <script src="canvas3d.js"></script>
 </body>
 </html>

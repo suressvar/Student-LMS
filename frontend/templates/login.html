@@ -44,8 +44,8 @@
                     <p class="login-subtitle">Identify yourself to enter the learning constellation.</p>
                     
                     <div class="role-selector">
-                        <button class="role-tab active" data-role="student">Student</button>
-                        <button class="role-tab" data-role="instructor">Instructor</button>
+                        <button type="button" class="role-tab active" data-role="student">Student</button>
+                        <button type="button" class="role-tab" data-role="instructor">Instructor</button>
                     </div>
                     
                     <form class="portal-form" id="portal-login-form">
@@ -172,9 +172,8 @@
 
             </div>
 
-            <!-- Right Side: Branding Showcase -->
             <div class="login-brand-container">
-                <div class="brand-bg-image"></div>
+                <canvas id="brand-3d-canvas" class="brand-bg-image"></canvas>
                 <div class="brand-overlay"></div>
                 
                 <div class="brand-content">
@@ -223,16 +222,27 @@
     <script src="bg3d.js"></script>
     <script src="app.js"></script>
     <script src="login.js"></script>
+    <script src="canvas3d.js"></script>
     <!-- Glass Toast -->
     <div class="glass-toast" id="glass-toast"></div>
 
     <script>
         // Google Sign-In handler
         function handleGoogleSignIn(response) {
+            let activeRole = 'student';
+            const signupBlock = document.getElementById('signup-form-block');
+            if (signupBlock && signupBlock.classList.contains('active')) {
+                const activeSignupRoleTab = document.querySelector('#signup-form-block .role-tab.active');
+                if (activeSignupRoleTab) activeRole = activeSignupRoleTab.getAttribute('data-role') || 'student';
+            } else {
+                const activeLoginRoleTab = document.querySelector('#login-form-block .role-tab.active');
+                if (activeLoginRoleTab) activeRole = activeLoginRoleTab.getAttribute('data-role') || 'student';
+            }
+
             fetch('/api/auth/google', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ credential: response.credential })
+                body: JSON.stringify({ credential: response.credential, role: activeRole })
             }).then(r => r.json()).then(data => {
                 if (data.token) {
                     localStorage.setItem('courseverse_token', data.token);

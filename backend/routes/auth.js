@@ -208,7 +208,7 @@ router.get('/google/client-id', (req, res) => {
 
 // 6. Google Sign-In
 router.post('/google', async (req, res) => {
-    const { credential } = req.body;
+    const { credential, role } = req.body;
     if (!credential) {
         return res.status(400).json({ error: 'Google credential token is required.' });
     }
@@ -225,6 +225,9 @@ router.post('/google', async (req, res) => {
         });
         const payload = ticket.getPayload();
         const { sub: googleId, email, name, picture } = payload;
+
+        // Verify/Sanitize role
+        const targetRole = ['student', 'instructor'].includes(role) ? role : 'student';
 
         // Look up user by google_id first, then email
         let result = await pool.query(
@@ -243,19 +246,31 @@ router.post('/google', async (req, res) => {
                 );
             }
         } else {
-            // Auto-register new Google user as student
-            const avatarSvg = `
-                <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="46" fill="#131b35" stroke="#8b5cf6" stroke-width="2"/>
-                    <circle cx="50" cy="38" r="14" fill="none" stroke="#8b5cf6" stroke-width="2"/>
-                    <path d="M25,78 Q50,60 75,78" fill="none" stroke="#06b6d4" stroke-width="2"/>
-                </svg>
-            `;
+            // Auto-register new Google user with selected role
+            let avatarSvg;
+            if (targetRole === 'instructor') {
+                avatarSvg = `
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="46" fill="#1a0508" stroke="#ff5c75" stroke-width="2"/>
+                        <circle cx="50" cy="38" r="16" fill="none" stroke="#ff5c75" stroke-width="2"/>
+                        <line x1="30" y1="72" x2="70" y2="72" stroke="#ff5c75" stroke-width="2"/>
+                        <path d="M30,72 Q50,55 70,72" fill="none" stroke="#ff3355" stroke-width="2"/>
+                    </svg>
+                `;
+            } else {
+                avatarSvg = `
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="46" fill="#131b35" stroke="#8b5cf6" stroke-width="2"/>
+                        <circle cx="50" cy="38" r="14" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                        <path d="M25,78 Q50,60 75,78" fill="none" stroke="#06b6d4" stroke-width="2"/>
+                    </svg>
+                `;
+            }
             const insertRes = await pool.query(
                 `INSERT INTO users (name, email, google_id, auth_provider, role, level, xp, avatar_svg, password_hash)
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NULL)
                  RETURNING id, name, email, role, level, xp`,
-                [name, email, googleId, 'google', 'student', 1, 0, avatarSvg]
+                [name, email, googleId, 'google', targetRole, 1, 0, avatarSvg]
             );
             user = insertRes.rows[0];
         }

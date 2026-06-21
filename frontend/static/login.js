@@ -36,12 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loginRoleSelector) {
         const tabs = loginRoleSelector.querySelectorAll('.role-tab');
+        const loginSubtitle = document.querySelector('#login-form-block .login-subtitle');
+        const loginSubmitBtn = document.querySelector('#portal-login-form .warp-submit-btn');
+
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
                 e.preventDefault();
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentLoginRole = tab.getAttribute('data-role');
+
+                if (currentLoginRole === 'instructor') {
+                    if (loginSubtitle) loginSubtitle.textContent = 'Secure portal for Academic Commanders and Instructors.';
+                    if (loginSubmitBtn) loginSubmitBtn.textContent = 'Initiate Warp as Instructor';
+                } else {
+                    if (loginSubtitle) loginSubtitle.textContent = 'Identify yourself to enter the learning constellation.';
+                    if (loginSubmitBtn) loginSubmitBtn.textContent = 'Initiate Warp as Cadet';
+                }
             });
         });
     }

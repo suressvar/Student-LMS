@@ -633,6 +633,7 @@ body {
 .hero-img {
     width: 100%;
     max-width: 500px;
+    height: 380px;
     border-radius: 16px;
     display: block;
     object-fit: cover;
@@ -1177,6 +1178,7 @@ body {
 .community-img {
     width: 100%;
     max-width: 520px;
+    height: 320px;
     border-radius: 16px;
     display: block;
     object-fit: cover;
@@ -2292,14 +2294,8 @@ body {
 .brand-bg-image {
     position: absolute;
     inset: 0;
-    background-image: url('images/hero_space_station.png');
-    background-size: cover;
-    background-position: center;
-    transition: transform 10s ease;
-}
-
-.login-card:hover .brand-bg-image {
-    transform: scale(1.05);
+    width: 100%;
+    height: 100%;
 }
 
 .brand-overlay {
