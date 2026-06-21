@@ -251,10 +251,10 @@ router.post('/google', async (req, res) => {
             if (targetRole === 'instructor') {
                 avatarSvg = `
                     <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="46" fill="#1a0508" stroke="#ff5c75" stroke-width="2"/>
-                        <circle cx="50" cy="38" r="16" fill="none" stroke="#ff5c75" stroke-width="2"/>
-                        <line x1="30" y1="72" x2="70" y2="72" stroke="#ff5c75" stroke-width="2"/>
-                        <path d="M30,72 Q50,55 70,72" fill="none" stroke="#ff3355" stroke-width="2"/>
+                        <circle cx="50" cy="50" r="46" fill="#1a0a2e" stroke="#c084fc" stroke-width="2"/>
+                        <circle cx="50" cy="38" r="16" fill="none" stroke="#c084fc" stroke-width="2"/>
+                        <line x1="30" y1="72" x2="70" y2="72" stroke="#c084fc" stroke-width="2"/>
+                        <path d="M30,72 Q50,55 70,72" fill="none" stroke="#8b5cf6" stroke-width="2"/>
                     </svg>
                 `;
             } else {

@@ -30,6 +30,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display correct dashboard and configure details
     if (userRole === 'student') {
         if (studentDash) studentDash.style.display = 'block';
+
+        // Dynamic Sidebar Nav for Student
+        const sidebarNav = document.querySelector('.sidebar-nav');
+        if (sidebarNav) {
+            sidebarNav.innerHTML = `
+                <a href="#" class="sidebar-nav-link active" data-section="main">
+                    <i class="fa-solid fa-gauge-high"></i> Galaxy Dashboard
+                </a>
+                <a href="#" class="sidebar-nav-link" data-section="courses">
+                    <i class="fa-solid fa-graduation-cap"></i> Courses
+                </a>
+                <a href="#" class="sidebar-nav-link" data-section="progress">
+                    <i class="fa-solid fa-chart-line"></i> Learning Progress
+                </a>
+                <a href="#" class="sidebar-nav-link" data-section="assignments">
+                    <i class="fa-solid fa-file-signature"></i> Assignments
+                </a>
+                <a href="#" class="sidebar-nav-link" data-section="quizzes">
+                    <i class="fa-solid fa-square-poll-vertical"></i> Quiz Results
+                </a>
+                <a href="#" class="sidebar-nav-link" data-section="notifications-sec">
+                    <i class="fa-solid fa-bell"></i> Notifications
+                </a>
+            `;
+        }
         
         // Populate header details
         if (headerTitle) headerTitle.textContent = "Mission Control";
@@ -64,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="#" class="sidebar-nav-link" data-section="instructor-analytics">
                     <i class="fa-solid fa-users-viewfinder"></i> Student Analytics
                 </a>
+                <a href="#" class="sidebar-nav-link" data-section="instructor-students">
+                    <i class="fa-solid fa-users"></i> View Students
+                </a>
                 <a href="#" class="sidebar-nav-link" data-section="instructor-forum">
                     <i class="fa-solid fa-bullhorn"></i> Announcements
                 </a>
@@ -75,14 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profileName) profileName.textContent = user.name;
         if (profileLevel) profileLevel.textContent = `LEVEL ${user.level} INSTRUCTOR`;
         if (profileAvatar) {
-            profileAvatar.style.borderColor = '#ff5c75';
+            profileAvatar.style.borderColor = '#c084fc';
             profileAvatar.innerHTML = `
                 <svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="46" fill="#1a0508" stroke="#ff5c75" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="46" fill="#1a0a2e" stroke="#c084fc" stroke-width="2"/>
                     <!-- Instructor avatar graphics -->
-                    <circle cx="50" cy="38" r="16" fill="none" stroke="#ff5c75" stroke-width="2"/>
-                    <line x1="30" y1="72" x2="70" y2="72" stroke="#ff5c75" stroke-width="2"/>
-                    <path d="M30,72 Q50,55 70,72" fill="none" stroke="#ff3355" stroke-width="2"/>
+                    <circle cx="50" cy="38" r="16" fill="none" stroke="#c084fc" stroke-width="2"/>
+                    <line x1="30" y1="72" x2="70" y2="72" stroke="#c084fc" stroke-width="2"/>
+                    <path d="M30,72 Q50,55 70,72" fill="none" stroke="#8b5cf6" stroke-width="2"/>
                 </svg>
             `;
         }
@@ -91,6 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (footerLeftInfo) {
             footerLeftInfo.innerHTML = `© 2245 COURSEVERSE ACADEMY • GALACTIC STANDARD TIME`;
         }
+
+        // Hide floating AI chat button and drawer for instructors
+        const chatFloatingBtn = document.getElementById('open-ai-btn');
+        const aiDrawer = document.getElementById('ai-drawer');
+        if (chatFloatingBtn) chatFloatingBtn.style.display = 'none';
+        if (aiDrawer) aiDrawer.style.display = 'none';
     }
 
 
@@ -341,8 +375,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const radius = (idx === 5 ? 5 : 6) * p.scale;
                 
                 // Color configuration
-                let clr = '#ff3355'; // purple
-                if (idx % 2 === 0) clr = '#ff5c75'; // cyan
+                let clr = '#8b5cf6'; // lilac dark
+                if (idx % 2 === 0) clr = '#c084fc'; // lilac bright
                 if (idx === 5) clr = document.body.classList.contains('light-theme') ? '#1e293b' : '#ffffff'; // center node
 
                 // Glow radial fill
@@ -573,7 +607,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('panel-backdrop').style.display = 'block';
     }
 
-    // ─── SIDEBAR NAVIGATION (full wiring) ────────────────────────────────────
     const allDashPanels = [
         studentDash, 
         instructorDash,
@@ -585,7 +618,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('notifications-sec-panel'),
         document.getElementById('instructor-courses-panel'),
         document.getElementById('instructor-analytics-panel'),
-        document.getElementById('instructor-forum-panel')
+        document.getElementById('instructor-forum-panel'),
+        document.getElementById('instructor-students-panel')
     ];
 
     function showDashPanel(panelEl) {
@@ -598,6 +632,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userRole === 'student' && studentDash) studentDash.style.display = 'block';
         if (userRole === 'instructor' && instructorDash) instructorDash.style.display = 'block';
     }
+
+    // Sidebar logo click: restore main dashboard panel
+    document.querySelector('.sidebar-logo')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const allLinks = document.querySelectorAll('.sidebar-nav-link');
+        allLinks.forEach(l => l.classList.remove('active'));
+        document.querySelector('.sidebar-nav-link[data-section="main"]')?.classList.add('active');
+        restoreMainDash();
+    });
 
     // Set up navigation listeners (using delegation to handle dynamic sidebar change on load)
     document.addEventListener('click', (e) => {
@@ -637,6 +680,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (section === 'instructor-analytics') {
             showDashPanel(document.getElementById('instructor-analytics-panel'));
             renderInstructorAnalyticsPanel();
+        } else if (section === 'instructor-students') {
+            showDashPanel(document.getElementById('instructor-students-panel'));
+            renderStudentsPanel();
         } else if (section === 'instructor-forum') {
             showDashPanel(document.getElementById('instructor-forum-panel'));
             renderInstructorForumPanel();
@@ -812,7 +858,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                         <svg width="70" height="70" style="flex-shrink:0;">
                             <circle cx="35" cy="35" r="28" stroke="rgba(255,255,255,0.06)" stroke-width="6" fill="transparent"/>
-                            <circle cx="35" cy="35" r="28" stroke="#ff3355" stroke-width="6" fill="transparent"
+                            <circle cx="35" cy="35" r="28" stroke="#a78bfa" stroke-width="6" fill="transparent"
                                 stroke-dasharray="${circumference.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"
                                 stroke-linecap="round" transform="rotate(-90 35 35)"/>
                             <text x="35" y="40" text-anchor="middle" fill="#fff" font-size="12" font-family="Space Grotesk" font-weight="600">${pct}%</text>
@@ -1549,9 +1595,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         badgeText = `GRADED: ${a.grade}/100`;
                         badgeTextColor = '#10b981';
                     } else {
-                        badgeColor = 'rgba(255, 92, 117, 0.2)'; // cyan
+                        badgeColor = 'rgba(167, 139, 250, 0.2)'; // lilac
                         badgeText = 'SUBMITTED';
-                        badgeTextColor = '#ff5c75';
+                        badgeTextColor = '#a78bfa';
                     }
                 } else if (isOverdue) {
                     badgeColor = 'rgba(255, 92, 117, 0.2)'; // pink
@@ -2436,5 +2482,80 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     }
+
+    async function renderStudentsPanel() {
+        const list = document.getElementById('students-list');
+        if (!list) return;
+        list.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:40px;">Scanning registry database...</div>';
+        try {
+            const res = await fetch('/api/instructor/students', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                list.innerHTML = `<div style="color:var(--clr-pink); text-align:center; padding:20px;">Telemetry error: ${data.error || 'Unknown'}</div>`;
+                return;
+            }
+            if (!data.students || data.students.length === 0) {
+                list.innerHTML = '<div style="color:rgba(255,255,255,0.3); text-align:center; padding:40px;">No registered cadets found in your courses.</div>';
+                return;
+            }
+            list.innerHTML = data.students.map(s => `
+                <div style="background:var(--glass-bg-card); border:1px solid var(--glass-border); border-radius:12px; padding:16px 20px; display:flex; align-items:center; gap:20px; transition:border-color 0.25s;">
+                    <div style="width:48px; height:48px; border-radius:50%; overflow:hidden; border:1.5px solid var(--clr-purple); background:#000;">
+                        ${s.avatar_svg || `
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="46" fill="#131b35" stroke="#8b5cf6" stroke-width="2"/>
+                                <circle cx="50" cy="40" r="16" fill="#8b5cf6"/>
+                                <path d="M25,78 L75,78 A 25 25 0 0 0 25 78" fill="none" stroke="#00f0ff" stroke-width="2"/>
+                            </svg>
+                        `}
+                    </div>
+                    <div style="flex-grow:1;">
+                        <h4 style="font-family:var(--font-heading); color:#fff; font-size:1.05rem; margin-bottom:4px;">${s.name}</h4>
+                        <span style="font-size:0.8rem; color:var(--text-secondary);"><i class="fa-regular fa-envelope"></i> ${s.email}</span>
+                    </div>
+                    <div>
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--clr-cyan); border:1px solid rgba(0,240,255,0.25); background:rgba(0,240,255,0.06); padding:4px 10px; border-radius:20px; letter-spacing:0.5px;">LEVEL ${s.level}</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch(e) {
+            console.error(e);
+            list.innerHTML = '<div style="color:var(--clr-pink); text-align:center; padding:20px;">Registry connection failure.</div>';
+        }
+    }
+
+    window.handleInstructorUpload = async function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        showToast("Uploading payload to mainframe...", "info");
+
+        try {
+            const res = await fetch('/api/instructor/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                showToast(`Payload "${data.file.originalName}" uploaded successfully!`, "success");
+            } else {
+                showToast(`Upload anomaly: ${data.error || 'Failed'}`, "error");
+            }
+        } catch (err) {
+            console.error(err);
+            showToast("Upload failed: Transmission link unstable.", "error");
+        } finally {
+            event.target.value = ''; // clear input
+        }
+    };
 
 });

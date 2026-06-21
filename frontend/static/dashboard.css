@@ -1502,15 +1502,17 @@ body.light-theme .bar-container {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     background: var(--clr-purple);
     border: none;
+    padding: 0;
+    overflow: hidden;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
-    box-shadow: 0 0 15px var(--clr-purple-glow);
+    box-shadow: 0 0 20px var(--clr-purple-glow);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -1678,7 +1680,7 @@ body.light-theme .bar-container {
 }
 
 .ai-chat-send:hover {
-    background: #ff3355;
+    background: #a78bfa;
 }
 
 /* Modal Overlay Styling */
