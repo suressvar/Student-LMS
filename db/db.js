@@ -20,7 +20,7 @@ const pool = connectionString
         user: process.env.DB_USER || 'postgres',
         password: process.env.DB_PASSWORD || 'postgres',
         host: process.env.DB_HOST || (isDocker ? 'host.docker.internal' : 'localhost'),
-        port: process.env.DB_PORT || 5432,
+        port: process.env.DB_PORT || 5000,
         database: process.env.DB_DATABASE || 'student_lms'
       });
 
