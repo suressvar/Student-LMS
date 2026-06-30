@@ -22,11 +22,16 @@
 
     <!-- Side Navigation Bar -->
     <aside class="dashboard-sidebar">
-        <div class="sidebar-brand">
-            <a href="#" class="sidebar-logo">
-                <i class="fa-solid fa-shuttle-space logo-icon" style="font-size: 1.35rem;"></i>
-                <span>CourseVerse</span>
-            </a>
+        <div class="sidebar-brand" style="position: relative; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <a href="#" class="sidebar-logo">
+                    <i class="fa-solid fa-shuttle-space logo-icon" style="font-size: 1.35rem;"></i>
+                    <span>CourseVerse</span>
+                </a>
+                <button class="action-btn sidebar-close-btn" id="sidebar-close-btn" aria-label="Close Sidebar" style="display: none; padding: 4px; font-size: 1.2rem;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
             <span class="sidebar-sub">DEEP SPACE LEARNING</span>
         </div>
         
@@ -53,7 +58,12 @@
         
         <!-- Header area (Header details populated dynamically by JS based on user role) -->
         <header class="dashboard-header">
-            <h1 class="header-title" id="dash-header-title">Mission Control</h1>
+            <div class="header-title-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                <button class="action-btn sidebar-toggle-btn" id="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </button>
+                <h1 class="header-title" id="dash-header-title">Mission Control</h1>
+            </div>
             
             <div class="header-actions">
                 <div class="search-box" style="position:relative;">

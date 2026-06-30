@@ -1298,10 +1298,55 @@
 
 }
 
+.sidebar-toggle-btn {
+    display: none;
+}
+.sidebar-close-btn {
+    display: none;
+}
+
 @media (max-width: 1024px) {
+    .sidebar-toggle-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-close-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    .sidebar-close-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-primary);
+    }
+
     .dashboard-sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
+        z-index: 1000;
     }
     
     .dashboard-sidebar.active {

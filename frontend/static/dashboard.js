@@ -127,6 +127,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if (aiDrawer) aiDrawer.style.display = 'none';
     }
 
+    /* ==========================================
+       RESPONSIVE SIDEBAR TOGGLE & NAVIGATION
+       ========================================== */
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+    const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+    const dashboardSidebar = document.querySelector('.dashboard-sidebar');
+    
+    if (sidebarToggleBtn && dashboardSidebar) {
+        sidebarToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dashboardSidebar.classList.toggle('active');
+        });
+    }
+    
+    if (sidebarCloseBtn && dashboardSidebar) {
+        sidebarCloseBtn.addEventListener('click', () => {
+            dashboardSidebar.classList.remove('active');
+        });
+    }
+
+    // Close sidebar when clicking links inside navigation
+    document.addEventListener('click', (e) => {
+        if (dashboardSidebar && dashboardSidebar.classList.contains('active')) {
+            const isClickInsideSidebar = dashboardSidebar.contains(e.target);
+            const isClickToggle = sidebarToggleBtn && sidebarToggleBtn.contains(e.target);
+            const isLinkClick = e.target.closest('.sidebar-nav-link') || e.target.closest('.sidebar-footer-link');
+            
+            if (isLinkClick || (!isClickInsideSidebar && !isClickToggle)) {
+                dashboardSidebar.classList.remove('active');
+            }
+        }
+    });
+
 
     /* ==========================================
        2. LOGOUT LOGIC
