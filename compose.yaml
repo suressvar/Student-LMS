@@ -6,5 +6,8 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
+      DB_HOST: host.docker.internal
     ports:
       - 3000:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

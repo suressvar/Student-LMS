@@ -6,7 +6,10 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: development
+      DB_HOST: host.docker.internal
     ports:
       - 3000:3000
       - 9229:9229
     command: ["node", "--inspect=0.0.0.0:9229", "backend/server.js"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

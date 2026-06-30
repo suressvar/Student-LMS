@@ -7,6 +7,8 @@ require('dotenv').config();
 // Configure DB connection
 const connectionString = process.env.DATABASE_URL;
 
+const isDocker = fs.existsSync('/.dockerenv');
+
 const pool = connectionString 
     ? new Pool({
         connectionString,
@@ -17,7 +19,7 @@ const pool = connectionString
     : new Pool({
         user: process.env.DB_USER || 'postgres',
         password: process.env.DB_PASSWORD || 'postgres',
-        host: process.env.DB_HOST || 'localhost',
+        host: process.env.DB_HOST || (isDocker ? 'host.docker.internal' : 'localhost'),
         port: process.env.DB_PORT || 5432,
         database: process.env.DB_DATABASE || 'student_lms'
       });
