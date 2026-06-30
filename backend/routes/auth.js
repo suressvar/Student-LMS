@@ -47,9 +47,9 @@ router.post('/register', async (req, res) => {
 
         // Insert new user
         const result = await pool.query(
-            `INSERT INTO users (name, email, password_hash, role, level, xp, avatar_svg) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, name, email, role, level, xp`,
-            [name, email, hashedPassword, role, level, xp, avatarSvg]
+            `INSERT INTO users (name, email, password_hash, role, level, xp, avatar_svg, auth_provider) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, name, email, role, level, xp`,
+            [name, email, hashedPassword, role, level, xp, avatarSvg, 'local']
         );
 
         const user = result.rows[0];
@@ -95,6 +95,10 @@ router.post('/login', async (req, res) => {
         }
 
         // Validate password
+        if (!user.password_hash || user.password_hash === 'google-auth-locked') {
+            return res.status(401).json({ error: 'This profile is linked to a Google account. Please use Google Sign-In.' });
+        }
+
         const validPassword = await bcrypt.compare(password, user.password_hash);
         if (!validPassword) {
             return res.status(401).json({ error: 'Incorrect credentials or role credentials. Access Denied.' });
@@ -268,9 +272,9 @@ router.post('/google', async (req, res) => {
             }
             const insertRes = await pool.query(
                 `INSERT INTO users (name, email, google_id, auth_provider, role, level, xp, avatar_svg, password_hash)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NULL)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                  RETURNING id, name, email, role, level, xp`,
-                [name, email, googleId, 'google', targetRole, 1, 0, avatarSvg]
+                [name, email, googleId, 'google', targetRole, 1, 0, avatarSvg, 'google-auth-locked']
             );
             user = insertRes.rows[0];
         }

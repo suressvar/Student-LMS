@@ -35,7 +35,7 @@ async function initDb() {
         await client.query(schemaSql);
         console.log('Database tables successfully verified/created.');
 
-        // ─── GOOGLE OAUTH MIGRATIONS ────────────────────────────────────────
+        // ─── DATABASE SCHEMA MIGRATIONS ──────────────────────────────────────
         // Make password_hash nullable (for Google-only accounts)
         await client.query(`
             ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL
@@ -49,6 +49,21 @@ async function initDb() {
         // Add auth_provider column
         await client.query(`
             ALTER TABLE users ADD COLUMN IF NOT EXISTS auth_provider VARCHAR(20) DEFAULT 'local'
+        `).catch(() => {});
+
+        // Add level column
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS level INT DEFAULT 1
+        `).catch(() => {});
+
+        // Add xp column
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS xp INT DEFAULT 0
+        `).catch(() => {});
+
+        // Add avatar_svg column
+        await client.query(`
+            ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_svg TEXT
         `).catch(() => {});
         // ─────────────────────────────────────────────────────────────────────
 
